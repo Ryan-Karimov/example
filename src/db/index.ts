@@ -1,4 +1,4 @@
-import { Pool } from 'pg'
+import { Pool, PoolClient } from 'pg'
 import { DB } from '../config/index'
 
 interface DatabaseOptions {
@@ -84,8 +84,10 @@ class Db {
         }
     }
 
-    async transaction(callback: (client: any) => Promise<void>): Promise<void> {
+    async transaction(callback: (client: PoolClient) => Promise<void>): Promise<void> {
         const client = await this.pool.connect();
+        let isTransactionSuccessfully = false;
+
         try {
             await client.query('BEGIN');
             await callback(client);
@@ -96,6 +98,11 @@ class Db {
             throw error;
         } finally {
             client.release();
+            if (isTransactionSuccessfully) {
+                console.log('Transaction committed successfully!');
+            } else {
+                console.log('Transaction was rolled back!');
+            }
         }
 
     }
@@ -103,7 +110,18 @@ class Db {
 
 const db = Db.getInstance()
 const dbPool = db.getPool()
+/*
+// EXAMPLE TO USE TRANSACTION METHOD
 
+const dbInstance = Db.getInstance();
+try {
+    await dbInstance.transaction(async (client) => {
+        await client.query('SELECT $1', [1]);
+        await client.query('SEELCT NOW()');
+    });
+} catch (error) {
+}
+*/
 export default {
     db,
     dbPool
