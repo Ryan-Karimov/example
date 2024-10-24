@@ -1,17 +1,23 @@
-import express, { Request, Response } from 'express';
+import express, { Express, Request, Response } from 'express';
+import cors from 'cors';
+import helmet from 'helmet'
+import http from 'http';
+
 import { APP } from './src/config/index'
 
+const app: Express = express();
 
-const app = express();
-
-app.use(express.json());
+app.use(cors())
+app.use(helmet());
+app.use(express.json({
+    limit: '1MB'
+}));
 
 // Test route
-app.get('/', (_req: Request, res: Response) => {
+app.get('/', async (_req: Request, res: Response) => {
     res.send('Hello, EXPRESS!');
 });
 
-// Connect to PostgreSQL and test connection
 app.get('/test-db', async (_req: Request, res: Response) => {
     try {
         res.json({ msg: "Hello world!" });
@@ -21,10 +27,12 @@ app.get('/test-db', async (_req: Request, res: Response) => {
     }
 });
 
+
+const server = http.createServer(app);
 const port = +APP.PORT! || 8000
 const host = APP.HOST! || 'localhost'
 
-app.listen(port, host, () => {
+server.listen(port, host, () => {
     console.log('___________________________________________');
     console.log(`Server is running on http://${host}:${port}`);
     console.log('___________________________________________');
