@@ -1,26 +1,42 @@
 export interface User {
-    id?: number;
+    id: number;
     first_name: string;
     last_name: string;
     birthday: Date;
     email: string;
-    image_url?: string;
-    gender?: number;
+    gender: number;
+    image_url: string | undefined;
 }
 
-export class UserModel implements User {
-    constructor(
-        public id: number,
-        public first_name: string,
-        public last_name: string,
-        public birthday: Date,
-        public password: string,
-        public email: string,
-        public createdAt: Date,
-        public updatedAt: Date
-    ) { }
+export class User implements User {
+    id: number;
+    first_name: string;
+    last_name: string;
+    birthday: Date;
+    email: string;
+    gender: number;
+    image_url: string | undefined;
 
-    checkPassword(password: string): boolean {
-        return this.password === password;
+    constructor(
+        id: number,
+        first_name: string,
+        last_name: string,
+        birthday: Date,
+        email: string,
+        gender: number,
+        image_url?: string,
+    ) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birthday = birthday;
+        this.email = email;
+        this.gender = gender;
+        this.image_url = image_url;
     }
+}
+
+
+export const createUser = async () => {
+
 }
