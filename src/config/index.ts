@@ -1,22 +1,26 @@
 import dotenv from 'dotenv';
-import path from 'path';
+import { getEnvParam, getEnvAsNumber } from './helper'
+import { AppConfig, DatabaseConfig } from './interfaces'
 
 dotenv.config({
     path: '.env.local'
 })
 
-export const APP = {
-    NAME: process.env.APP_NAME,
-    PORT: process.env.APP_PORT,
-    HOST: process.env.APP_HOST,
-    SECRET_KEY: process.env.APP_SECRET_KEY,
+export const APP: AppConfig = {
+    NAME: getEnvParam('APP_NAME', 'DefaultApplication'),
+    PORT: getEnvAsNumber('APP_PORT', 3000),
+    HOST: getEnvParam('APP_HOST', 'localhost'),
+    SECRET_KEY: getEnvParam('APP_SECRET_KEY', 'DefaultSecretKey'),
+    JWT_SECRET_KEY: getEnvParam('JWT_SECRET_KEY', 'DefaultJWTSecretKey'),
 }
 
-export const DB = {
-    PORT: process.env.DB_PORT,
-    NAME: process.env.DB_NAME,
-    HOST: process.env.DB_HOST,
-    APP_NAME: process.env.DB_APP_NAME,
-    USERNAME: process.env.DB_USERNAME,
-    PASSWORD: process.env.DB_PASSWORD,
+export const DB: DatabaseConfig = {
+    NAME: getEnvParam('DB_NAME', 'DefaultDbTableName'),
+    HOST: getEnvParam('DB_HOST', 'localhost'),
+    PORT: getEnvAsNumber('DB_PORT', 5432),
+    APP_NAME: getEnvParam('DB_APP_NAME', 'DefaultDbApplication'),
+    USERNAME: getEnvParam('DB_USERNAME', 'postgres'),
+    PASSWORD: getEnvParam('DB_PASSWORD', 'postgres'),
+    MAX_POOL_COUNT: getEnvAsNumber('DB_MAX_POOL_COUNT', 10),
+    CONN_TIME_OUT: getEnvAsNumber('CONN_TIME_OUT', 1000)
 }
