@@ -1,4 +1,4 @@
-import db from "../db";
+import { db } from "../db";
 import bcrypt from 'bcrypt';
 
 interface IUser {
@@ -40,18 +40,18 @@ export class User implements IUser {
     static async createUser(user: Partial<IUser>, phone_number: string, password: string, tariff_id: number) {
         const { last_name, first_name, birthday, email, image_url, card_number, gender } = user;
 
-        const existingUser = await db.db.query(`
+        const existingUser = await db.query(`
             SELECT id FROM public.user_meta WHERE login = $1;
         `, [phone_number]);
 
         if (existingUser.length > 0) {
-            throw new Error('User with this phone number already exists');
+            throw new Error('A user with the same phone number already exists!');
         }
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        await db.db.transaction(async (client) => {
+        await db.transaction(async (client) => {
             const result = await client.query(`
                 INSERT INTO public.users (last_name, first_name, birthday, email, image_url, card_number, gender) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7) 
@@ -69,7 +69,6 @@ export class User implements IUser {
                 INSERT INTO admin.tariffs_controller (user_id, tariff_id, status)
                 VALUES ($1, $2, $3);
             `, [newUserId, tariff_id, true])
-
         });
     }
 
@@ -78,7 +77,7 @@ export class User implements IUser {
     }
 
     static async findByLogin(login: string) {
-        const result = await db.db.query(`
+        const result = await db.query(`
             SELECT 
                 u.id,
                 u.email,

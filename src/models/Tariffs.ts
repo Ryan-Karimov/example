@@ -1,4 +1,4 @@
-import db from "../db";
+import { db } from "../db";
 
 interface ITariffs {
     id?: number;
@@ -36,11 +36,11 @@ export class Tariffs implements ITariffs {
     }
 
     static async getAll(): Promise<Tariffs> {
-        const query = await db.db.query(`
+        const query = await db.query(`
             SELECT 
                 t.id,
                 t.title,
-                to_char(t.expired_date, 'DD-MM-YYYY'),
+                to_char(t.expired_date, 'DD.MM.YYYY HH24:MI:SS'),
                 p.current_price::INT AS price,
                 t.workspace_limit,
                 t.workers_limit,

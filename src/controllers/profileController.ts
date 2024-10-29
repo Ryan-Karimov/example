@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 
-
-
 export class ProfileController {
     static async uploadImage(req: Request, res: Response, next: NextFunction) {
         try {

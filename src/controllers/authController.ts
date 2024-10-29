@@ -7,6 +7,7 @@ import { checkEmailExistence } from 'advanced-email-existence';
 
 export class AuthController {
     static async signUp(req: Request, res: Response) {
+
         try {
             const result = await checkEmailExistence(req.body.email);
             if (!result.valid) {
@@ -22,17 +23,16 @@ export class AuthController {
                 message: 'User created successfully'
             });
         } catch (error) {
-            if (error instanceof Error) {
-                if (error.message === 'User with this phone number already exists') {
-                    res.status(409).json({
-                        message: error.message
-                    });
-                } else {
-                    res.status(500).json({
-                        message: 'Error creating user',
-                        error: error.message
-                    });
-                }
+            const err = error as Error;
+            if (err.message === 'User with this phone number already exists') {
+                res.status(409).json({
+                    message: err.message
+                });
+            } else {
+                res.status(500).json({
+                    message: 'Error creating user',
+                    error: err.message
+                });
             }
         }
     }
