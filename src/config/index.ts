@@ -11,6 +11,7 @@ export const APP: AppConfig = {
     PORT: getEnvAsNumber('APP_PORT', 3000),
     HOST: getEnvParam('APP_HOST', 'localhost'),
     SECRET_KEY: getEnvParam('APP_SECRET_KEY', 'DefaultSecretKey'),
+    JWT_SECRET_KEY: getEnvParam('JWT_SECRET_KEY', 'DefaultJWTSecretKey'),
 }
 
 export const DB: DatabaseConfig = {
@@ -21,5 +22,5 @@ export const DB: DatabaseConfig = {
     USERNAME: getEnvParam('DB_USERNAME', 'postgres'),
     PASSWORD: getEnvParam('DB_PASSWORD', 'postgres'),
     MAX_POOL_COUNT: getEnvAsNumber('DB_MAX_POOL_COUNT', 10),
-    CONN_TIME_OUT: getEnvAsNumber('CONN_TIME_OUT', 10)
+    CONN_TIME_OUT: getEnvAsNumber('CONN_TIME_OUT', 1000)
 }

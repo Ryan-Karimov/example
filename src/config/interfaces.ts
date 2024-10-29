@@ -3,6 +3,7 @@ export interface AppConfig {
     PORT: number;
     HOST: string;
     SECRET_KEY: string;
+    JWT_SECRET_KEY: string;
 }
 
 export interface DatabaseConfig {

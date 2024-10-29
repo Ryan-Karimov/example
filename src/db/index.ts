@@ -71,7 +71,7 @@ class Db {
         return this.pool;
     }
 
-    async query(query: string, params: any[]): Promise<any> {
+    async query(query: string, params?: any[]): Promise<any> {
         try {
             const results = await this.pool.query(
                 query,
