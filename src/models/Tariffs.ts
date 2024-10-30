@@ -46,7 +46,8 @@ export class Tariffs implements ITariffs {
                 t.workers_limit,
                 t.moderators_limit,
                 t.projects_limit,
-                t.files_limit
+                t.files_limit,
+                CASE WHEN t.title = 'Free' THEN true ELSE false END AS is_disable
             FROM admin.tariffs t
             JOIN admin.prices p ON p.id = t.price_id
             ORDER BY t.id ASC;`);

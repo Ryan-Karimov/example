@@ -1,12 +1,13 @@
 import multer from 'multer';
 import path from 'path';
 
+const filePath = path.join(process.cwd(), 'static', 'profileImages');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, filePath);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+        cb(null, file.originalname);
     }
 });
 

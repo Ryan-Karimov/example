@@ -16,6 +16,18 @@ export class AuthController {
                 return;
             }
 
+            const existingByEmail = await User.findByEmail(req.body.email);
+            if (existingByEmail) {
+                res.status(409).json({ message: 'User with this phone number already exists' });
+                return;
+            }
+
+            const existtingByLogin = await User.findByLogin(req.body.phone);
+            if (existtingByLogin) {
+                res.status(409).json({ message: 'User with this email already exists' });
+                return;
+            }
+
             await User.createUser(req.body, req.body.phone, req.body.password, req.body.tariff_id);
 
             res.status(201).json({
@@ -38,35 +50,29 @@ export class AuthController {
     }
 
     static async signIn(req: Request, res: Response) {
-        try {
-            const { login, password } = req.body;
+        const { login, password } = req.body;
 
-            const user = await User.findByLogin(login);
-
-            const isPasswordValid = await bcrypt.compare(password, user[0].password);
-
-            if (!user || !isPasswordValid) {
-                res.status(400).json({ message: 'Invalid email or password' });
-                return;
-            }
-
-            const token = jwt.sign(
-                { id: user[0].id, login: user[0].login },
-                APP.JWT_SECRET_KEY,
-                { expiresIn: '10h' }
-            );
-
-            res.status(201).json({
-                message: 'Sign-in successful',
-                token
-            });
-        } catch (error) {
-            if (error instanceof Error) {
-                res.status(500).json({
-                    message: 'Error during sign-in',
-                    error: error.message
-                });
-            }
+        const user = await User.findByLogin(login);
+        if (!user) {
+            res.status(400).json({ message: 'Invalid login or password' });
+            return;
         }
+
+        const isPasswordValid = await bcrypt.compare(password, user[0].password);
+        if (!isPasswordValid) {
+            res.status(400).json({ message: 'Invalid login or password' });
+            return;
+        }
+
+        const token = jwt.sign(
+            { id: user[0].id, login: user[0].login },
+            APP.JWT_SECRET_KEY,
+            { expiresIn: '10h' }
+        );
+        res.status(200).json({
+            message: 'Sign-in successful',
+            token
+        });
+        return;
     }
 }

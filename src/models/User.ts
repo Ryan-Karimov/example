@@ -40,14 +40,6 @@ export class User implements IUser {
     static async createUser(user: Partial<IUser>, phone_number: string, password: string, tariff_id: number) {
         const { last_name, first_name, birthday, email, image_url, card_number, gender } = user;
 
-        const existingUser = await db.db.query(`
-            SELECT id FROM public.user_meta WHERE login = $1;
-        `, [phone_number]);
-
-        if (existingUser.length > 0) {
-            throw new Error('User with this phone number already exists');
-        }
-
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -74,10 +66,15 @@ export class User implements IUser {
     }
 
     static async uploadImage() {
-
     }
 
-    static async findByLogin(login: string) {
+    static async findByEmail(params: string): Promise<any> {
+        const query = 'SELECT id FROM public.users WHERE email = $1;'
+        const result = await db.db.query(query, [params])
+        return result;
+    }
+
+    static async findByLogin(params: Array<string>): Promise<any> {
         const result = await db.db.query(`
             SELECT 
                 u.id,
@@ -87,9 +84,8 @@ export class User implements IUser {
             FROM public.users u
             JOIN public.user_meta um ON u.id = um.user_id
             WHERE um.login = $1;
-        `, [login]);
+        `, params);
 
         return result;
-
     }
 }
