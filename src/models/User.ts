@@ -14,6 +14,21 @@ interface IUser {
     created_at?: Date;
 }
 
+export interface IUserLoginRequest {
+    login: string
+    pasword: string
+}
+
+export class UserLoginRequest implements IUserLoginRequest {
+    login: string
+    pasword: string
+
+    constructor(login: string, pasword: string) {
+        this.login = login;
+        this.pasword = pasword;
+    }
+}
+
 export class User implements IUser {
     id?: number;
     last_name: string;

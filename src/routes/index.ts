@@ -7,8 +7,8 @@ const router: Router = Router();
 
 export default (): Router => {
     auth('auth', router)
-    tariffs('/tariffs', router)
-    profile('/profile', router)
+    tariffs('tariffs', router)
+    profile('profile', router)
 
     return router;
 }

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { APP } from '../config/index';
+import { authSignInSchema, authSignUpSchema } from '../schemas'
 import { checkEmailExistence } from 'advanced-email-existence';
 
 export class AuthController {
@@ -38,35 +39,38 @@ export class AuthController {
     }
 
     static async signIn(req: Request, res: Response) {
-        try {
-            const { login, password } = req.body;
-
-            const user = await User.findByLogin(login);
-
-            const isPasswordValid = await bcrypt.compare(password, user[0].password);
-
-            if (!user || !isPasswordValid) {
-                res.status(400).json({ message: 'Invalid email or password' });
-                return;
-            }
-
-            const token = jwt.sign(
-                { id: user[0].id, login: user[0].login },
-                APP.JWT_SECRET_KEY,
-                { expiresIn: '10h' }
-            );
-
-            res.status(201).json({
-                message: 'Sign-in successful',
-                token
-            });
-        } catch (error) {
-            if (error instanceof Error) {
-                res.status(500).json({
-                    message: 'Error during sign-in',
-                    error: error.message
-                });
-            }
+        const { error, value } = authSignInSchema.validate(req.body)
+        if (error) {
+            res.status(400).json({
+                message: "Bad request!"
+            })
+            return;
         }
+
+        const user = await User.findByLogin(value.login);
+        if (user.length === 0) {
+            res.status(400).json({
+                message: "Invalid login or password"
+            })
+            return;
+        }
+
+        const isPasswordValid = await bcrypt.compare(value.password, user[0].password);
+        if (!isPasswordValid) {
+            res.status(400).json({
+                message: 'Invalid login or password'
+            });
+            return;
+        }
+        const token = jwt.sign(
+            { id: user[0].id, login: user[0].login },
+            APP.JWT_SECRET_KEY,
+            { expiresIn: '10h' }
+        );
+        res.status(200).json({
+            message: 'Sign-in successful',
+            token
+        });
+        return;
     }
 }
