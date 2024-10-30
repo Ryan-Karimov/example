@@ -110,6 +110,7 @@ class Db {
 
 export const db = Db.getInstance()
 export const dbPool = db.getPool()
+
 /*
 // EXAMPLE TO USE TRANSACTION METHOD
 

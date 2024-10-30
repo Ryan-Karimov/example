@@ -5,7 +5,6 @@ import path from 'path';
 import http from 'http';
 import multer from 'multer';
 
-import { catchError } from './helper'
 import { GlobalErrorHandlerMiddleWare } from './middlewares/error'
 
 import { APP } from './config'
@@ -13,21 +12,15 @@ import routes from './routes'
 
 const app: Express = express();
 
-app.use(cors({ origin: '*' }))
+app.use(cors({ origin: '*' }));
 app.use(helmet());
 app.use(multer({ dest: './static/profileImages' }).any());
 app.use('/files', express.static(path.join(__dirname, 'static')));
 app.use(express.json({
     limit: '100MB'
 }));
+
 app.use('/', routes())
-
-const home = async (req: Request, res: Response) => {
-    throw new Error('Kay')
-}
-
-app.get('/home', catchError(home))
-
 app.use(GlobalErrorHandlerMiddleWare())
 
 

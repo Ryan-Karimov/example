@@ -8,6 +8,11 @@ import { checkEmailExistence } from 'advanced-email-existence';
 
 export class AuthController {
     static async signUp(req: Request, res: Response) {
+        const { error, value } = authSignUpSchema.validate(req.body);
+        if (error) {
+
+        }
+        const user = await User.findUserByPhoneNumber([])
 
         try {
             const result = await checkEmailExistence(req.body.email);
@@ -47,7 +52,7 @@ export class AuthController {
             return;
         }
 
-        const user = await User.findByLogin(value.login);
+        const user = await User.findUserByLogin(value.login);
         if (user.length === 0) {
             res.status(400).json({
                 message: "Invalid login or password"
