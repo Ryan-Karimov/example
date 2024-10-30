@@ -1,4 +1,4 @@
-import db from "../db";
+import { db } from "../db";
 import bcrypt from 'bcrypt';
 
 interface IUser {
@@ -14,36 +14,22 @@ interface IUser {
     created_at?: Date;
 }
 
-export class User implements IUser {
-    id?: number;
-    last_name: string;
-    first_name: string;
-    birthday: Date;
-    email: string;
-    image_url?: string;
-    card_number?: string;
-    gender?: number = 0;
-    is_active?: boolean = true;
-
-    constructor(user: Partial<IUser>) {
-        this.id = user.id!;
-        this.last_name = user.last_name!;
-        this.first_name = user.first_name!;
-        this.birthday = user.birthday!;
-        this.email = user.email!;
-        this.image_url = user.image_url;
-        this.card_number = user.card_number;
-        this.gender = user.gender;
-        this.is_active = user.is_active;
-    }
-
+export class User {
     static async createUser(user: Partial<IUser>, phone_number: string, password: string, tariff_id: number) {
         const { last_name, first_name, birthday, email, image_url, card_number, gender } = user;
+
+        const existingUser = await db.query(`
+            SELECT id FROM public.user_meta WHERE login = $1;
+        `, [phone_number]);
+
+        if (existingUser.length > 0) {
+            throw new Error('A user with the same phone number already exists!');
+        }
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        await db.db.transaction(async (client) => {
+        await db.transaction(async (client) => {
             const result = await client.query(`
                 INSERT INTO public.users (last_name, first_name, birthday, email, image_url, card_number, gender) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7) 
@@ -61,7 +47,6 @@ export class User implements IUser {
                 INSERT INTO admin.tariffs_controller (user_id, tariff_id, status)
                 VALUES ($1, $2, $3);
             `, [newUserId, tariff_id, true])
-
         });
     }
 
@@ -74,8 +59,26 @@ export class User implements IUser {
         return result;
     }
 
-    static async findByLogin(params: Array<string>): Promise<any> {
-        const result = await db.db.query(`
+    static async findUserByEmailAddress(params: Array<string>): Promise<any> {
+        const query = `
+            SELECT id
+            FROM public.users
+            WHERE email = $1`
+        const result = await db.query(query, params)
+        return result;
+    }
+
+    static async findUserByPhoneNumber(params: Array<string>): Promise<any> {
+        const query = `
+            SELECT id
+            FROM public.user_meta
+            WHERE login = $1`
+        const result = await db.query(query, params)
+        return result;
+    }
+
+    static async findUserByLogin(login: string) {
+        const result = await db.query(`
             SELECT 
                 u.id,
                 u.email,

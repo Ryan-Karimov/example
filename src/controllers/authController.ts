@@ -3,10 +3,17 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import { APP } from '../config/index';
+import { authSignInSchema, authSignUpSchema } from '../schemas'
 import { checkEmailExistence } from 'advanced-email-existence';
 
 export class AuthController {
     static async signUp(req: Request, res: Response) {
+        const { error, value } = authSignUpSchema.validate(req.body);
+        if (error) {
+
+        }
+        const user = await User.findUserByPhoneNumber([])
+
         try {
             const result = await checkEmailExistence(req.body.email);
             if (!result.valid) {
@@ -34,17 +41,16 @@ export class AuthController {
                 message: 'User created successfully'
             });
         } catch (error) {
-            if (error instanceof Error) {
-                if (error.message === 'User with this phone number already exists') {
-                    res.status(409).json({
-                        message: error.message
-                    });
-                } else {
-                    res.status(500).json({
-                        message: 'Error creating user',
-                        error: error.message
-                    });
-                }
+            const err = error as Error;
+            if (err.message === 'User with this phone number already exists') {
+                res.status(409).json({
+                    message: err.message
+                });
+            } else {
+                res.status(500).json({
+                    message: 'Error creating user',
+                    error: err.message
+                });
             }
         }
     }
@@ -63,7 +69,39 @@ export class AuthController {
             res.status(400).json({ message: 'Invalid login or password' });
             return;
         }
+        const { error, value } = authSignInSchema.validate(req.body)
+        if (error) {
+            res.status(400).json({
+                message: "Bad request!"
+            })
+            return;
+        }
 
+        const user = await User.findUserByLogin(value.login);
+        if (user.length === 0) {
+            res.status(400).json({
+                message: "Invalid login or password"
+            })
+            return;
+        }
+
+        const token = jwt.sign(
+            { id: user[0].id, login: user[0].login },
+            APP.JWT_SECRET_KEY,
+            { expiresIn: '10h' }
+        );
+        res.status(200).json({
+            message: 'Sign-in successful',
+            token
+        });
+        return;
+        const isPasswordValid = await bcrypt.compare(value.password, user[0].password);
+        if (!isPasswordValid) {
+            res.status(400).json({
+                message: 'Invalid login or password'
+            });
+            return;
+        }
         const token = jwt.sign(
             { id: user[0].id, login: user[0].login },
             APP.JWT_SECRET_KEY,

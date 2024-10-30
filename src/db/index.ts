@@ -108,8 +108,9 @@ class Db {
     }
 }
 
-const db = Db.getInstance()
-const dbPool = db.getPool()
+export const db = Db.getInstance()
+export const dbPool = db.getPool()
+
 /*
 // EXAMPLE TO USE TRANSACTION METHOD
 
@@ -122,7 +123,3 @@ try {
 } catch (error) {
 }
 */
-export default {
-    db,
-    dbPool
-};
