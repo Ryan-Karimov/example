@@ -6,7 +6,7 @@ interface IAuthController {
 
 export function AuthController(schema: any, endpointCallback: IAuthController): IAuthController {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        const { error, value } = schema.validate(req.body)
+        const { error, value } = schema.validate(req.body);
         if (error) {
             res.status(400).send({
                 message: error.details[0].message
