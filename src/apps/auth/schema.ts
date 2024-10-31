@@ -8,9 +8,9 @@ export const signUpSchema = Joi.object({
     image_url: Joi.string().optional(),
     card_number: Joi.string().optional(),
     gender: Joi.number().required().default(0),
-    is_active: Joi.boolean().optional().default(true),
     phone: Joi.string().max(16).required(),
-    password: Joi.string().min(6).required()
+    password: Joi.string().min(6).required(),
+    tariff_id: Joi.number().required()
 })
 
 export const signInSchema = Joi.object({

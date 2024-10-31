@@ -6,6 +6,8 @@ interface GlobalErrorHandlerMiddleWare {
 
 export function GlobalErrorHandlerMiddleWare(): GlobalErrorHandlerMiddleWare {
     return async (_error: Error, _req: Request, _res: Response, _next: NextFunction): Promise<void> => {
+        console.log(_error);
+
         _res.status(500).send({
             error: _error.message
         })
