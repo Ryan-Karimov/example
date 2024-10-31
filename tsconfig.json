@@ -9,7 +9,7 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "moduleResolution": "node",
-        "noImplicitAny": false
+        "noImplicitAny": false,
     },
     "include": [
         "src/**/*",

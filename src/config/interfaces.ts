@@ -16,3 +16,10 @@ export interface DatabaseConfig {
     MAX_POOL_COUNT: number;
     CONN_TIME_OUT: number;
 }
+
+export interface StaticConfig {
+    FULL_PATH: string;
+    MAIN_FOLDER: string;
+    IMAGES: string;
+    IMAGE_ALLOWED_TYPES: Array<string>
+}

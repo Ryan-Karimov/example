@@ -92,6 +92,7 @@ class Db {
             await client.query('BEGIN');
             await callback(client);
             await client.query('COMMIT');
+            isTransactionSuccessfully = true;
         } catch (error) {
             await client.query('ROLLBACK');
             console.error('Error on transaction:', error);
@@ -104,6 +105,8 @@ class Db {
                 console.log('Transaction was rolled back!');
             }
         }
+
+        return
 
     }
 }
