@@ -10,7 +10,6 @@ export function GlobalNotFoundHandlerMiddleWare(): GlobalNotFoundMiddleWare {
             message: "Not Found!"
         })
     }
-
 }
 
 interface GlobalErrorHandlerMiddleWare {
