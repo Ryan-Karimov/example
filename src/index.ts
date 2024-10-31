@@ -1,27 +1,7 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import path from 'path';
 import http from 'http';
-import multer from 'multer';
 
-import { GlobalErrorHandlerMiddleWare } from './middlewares/error'
-
-import { APP } from './config'
-import routes from './routes'
-
-const app: Express = express();
-
-app.use(cors({ origin: '*' }));
-app.use(helmet());
-app.use('/static', express.static(path.join(process.cwd(), 'static')));
-app.use(express.json({
-    limit: '100MB'
-}));
-
-app.use('/', routes())
-app.use(GlobalErrorHandlerMiddleWare())
-
+import app from './app'
+import { APP } from './config';
 
 const server = http.createServer(app);
 
