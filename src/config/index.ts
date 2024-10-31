@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { getEnvParam, getEnvAsNumber } from './helper'
-import { AppConfig, DatabaseConfig, StaticConfig } from './interfaces'
+import { AppConfig, DatabaseConfig, UploadConfig } from './interfaces'
 import path from 'path'
 
 dotenv.config({
@@ -26,10 +26,16 @@ export const DB: DatabaseConfig = {
     CONN_TIME_OUT: getEnvAsNumber('CONN_TIME_OUT', 1000)
 }
 
-export const STATIC: StaticConfig = {
+export const UPLOAD: UploadConfig = {
     FULL_PATH: getEnvParam('FULL_PATH', process.cwd()),
-    MAIN_FOLDER: path.join(getEnvParam('FULL_PATH', process.cwd()), getEnvParam('MAIN_FOLDER', 'static')),
-    IMAGES: path.join(getEnvParam('FULL_PATH', process.cwd()), getEnvParam('MAIN_FOLDER', 'static'), getEnvParam('IMAGES', 'images')),
+    MAIN_FOLDER: path.join(
+        getEnvParam('FULL_PATH', process.cwd()),
+        getEnvParam('MAIN_FOLDER', 'uploads')),
+    IMAGE_FOLDER_NAME_TO_SAVE: path.join(
+        getEnvParam('FULL_PATH', process.cwd()),
+        getEnvParam('MAIN_FOLDER', 'uploads'),
+        getEnvParam('IMAGE_FOLDER_NAME_TO_SAVE', 'images')),
+    IMAGE_INCOMING_KEY: getEnvParam('IMAGE_INCOMING_KEY', 'image'),
     IMAGE_ALLOWED_TYPES: getEnvParam('IMAGE_ALLOWED_TYPES', 'jpeg, png, gif, bmp, tiff, svg+xml')
         .split(',')
         .map((imageType: string) => `image/${imageType.trim()}`),

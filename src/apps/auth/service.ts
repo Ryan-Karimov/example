@@ -11,38 +11,37 @@ import { removeFile, hash, compare } from '../../helper'
 
 export class AuthService {
     static async userSignUp(req: Request, res: Response) {
-        const image = req.file as Express.Multer.File;
-        if (!image) {
+        const { tariff_id, last_name, first_name, birthday, email, image, card_number, gender, phone, password } = req.body;
+        if (image === null) {
             res.status(400).send({
                 message: "Invalid file type. Only JPEG, PNG, and PDF files are allowed!"
             });
             return;
         }
 
+        const uploadedFile = req.file as Express.Multer.File
         const isExistsPhoneNumber = await AuthDB.findUserByLogin([req.body.phone]);
         if (isExistsPhoneNumber.length !== 0) {
-            removeFile(image.path);
+            if (uploadedFile) removeFile(uploadedFile.path);
             res.status(409).json({ message: 'A user with the same phone number already exists!' });
             return;
         }
 
         const isExistsEmail = await AuthDB.findUserByEmail([req.body.email]);
         if (isExistsEmail.length !== 0) {
-            removeFile(image.path)
+            if (uploadedFile) removeFile(uploadedFile.path);
             res.status(409).json({ message: 'A user with the same email address already exists!' });
             return;
         }
 
         const checkEmail = await checkEmailExistence(req.body.email);
         if (!checkEmail.valid) {
-            removeFile(image.path)
+            if (uploadedFile) removeFile(uploadedFile.path);
             res.status(400).json({
                 message: 'Email does not exist or is invalid!'
             });
             return;
         }
-
-        const { tariff_id, last_name, first_name, birthday, email, card_number, gender, phone, password } = req.body;
 
         const hashPassword = await hash(password);
         await db.transaction(async (client: PoolClient) => {

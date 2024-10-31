@@ -7,9 +7,9 @@ export const signUpSchema = Joi.object({
     first_name: Joi.string().max(32).required(),
     birthday: JoiDate('DD.MM.YYYY').required(),
     email: Joi.string().max(64).required(),
-    image: Joi.string().optional(),
-    card_number: Joi.string().optional(),
-    gender: Joi.number().min(0).max(1).required(),
+    image: Joi.string().allow('', null).default('').optional(),
+    card_number: Joi.string().allow('', null).optional(),
+    gender: Joi.number().integer().valid(0, 1).required(),
     phone: Joi.string().max(16).required(),
     password: Joi.string().min(6).required()
 })

@@ -17,9 +17,10 @@ export interface DatabaseConfig {
     CONN_TIME_OUT: number;
 }
 
-export interface StaticConfig {
+export interface UploadConfig {
     FULL_PATH: string;
     MAIN_FOLDER: string;
-    IMAGES: string;
+    IMAGE_FOLDER_NAME_TO_SAVE: string;
+    IMAGE_INCOMING_KEY: string;
     IMAGE_ALLOWED_TYPES: Array<string>
 }

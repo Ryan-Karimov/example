@@ -7,7 +7,6 @@ export function UploadFileHandler(foldername: string, allowedTypes: Array<string
     return multer({
         storage: diskStorage({
             destination: (_req, _file, cb) => {
-                console.log('Preparing to create directory for uploads...');
                 FsMakeDir(foldername, { recursive: true }, (err) => {
                     if (err) {
                         console.error('Error creating directory:', err);
@@ -20,14 +19,16 @@ export function UploadFileHandler(foldername: string, allowedTypes: Array<string
                 const { format } = getFileDirnaeAndBasename(file.originalname)
                 const newFilename = `${generateHexFromUUID4()}.${format}`
 
+                file.filename = newFilename
+                _req.body.image = newFilename
                 cb(null, newFilename)
-                file.originalname = newFilename
             },
         }),
         fileFilter: (_req, file, cb: multer.FileFilterCallback) => {
             if (allowedTypes.includes(file.mimetype)) {
                 cb(null, true); // Accept the file
             } else {
+                _req.body.image = null
                 cb(null, false); // Reject the file
             }
         }
