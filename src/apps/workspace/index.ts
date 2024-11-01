@@ -10,7 +10,7 @@ import { WorkspaceService } from "./service";
 // import { signUpSchema, signInSchema } from './schema'
 
 export function workspaceRouteRegister(prefix: string, router: Router, ...middlewares: Array<CallableFunction>): void {
-    router.all(concatPaths(prefix), middlewares.map((middleware) => middleware()))
+    router.use(concatPaths(prefix), middlewares.map((middleware) => middleware()))
 
     router.post(concatPaths(prefix, 'create'), WorkspaceController(createWorkspaceSchema, WorkspaceService.createWorkspace))
     router.get(concatPaths(prefix, 'workspaces'), WorkspaceController(getWorkspacesSchema, WorkspaceService.getWorkspacesByOwnerId))
