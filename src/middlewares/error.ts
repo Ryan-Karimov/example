@@ -6,6 +6,8 @@ interface GlobalNotFoundMiddleWare {
 
 export function GlobalNotFoundHandlerMiddleWare(): GlobalNotFoundMiddleWare {
     return async (_req: Request, _res: Response, _next: NextFunction): Promise<void> => {
+        console.log(_req.path, _req.baseUrl);
+
         _res.status(404).json({
             message: "Not Found!"
         })
