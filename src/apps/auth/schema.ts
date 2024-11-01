@@ -1,13 +1,15 @@
 import Joi from 'joi'
+import { JoiDate } from '../../helper'
 
 export const signUpSchema = Joi.object({
+    tariff_id: Joi.number().required().integer().min(1),
     last_name: Joi.string().max(32).required(),
     first_name: Joi.string().max(32).required(),
-    birthday: Joi.date().required(),
+    birthday: JoiDate('DD.MM.YYYY').required(),
     email: Joi.string().max(64).required(),
-    image_url: Joi.string().optional(),
-    card_number: Joi.string().optional(),
-    gender: Joi.number().required().default(0),
+    image: Joi.string().allow('', null).default('').optional(),
+    card_number: Joi.string().allow('', null).optional(),
+    gender: Joi.number().integer().valid(0, 1).required(),
     phone: Joi.string().max(16).required(),
     password: Joi.string().min(6).required(),
     tariff_id: Joi.number().required()

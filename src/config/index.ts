@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { getEnvParam, getEnvAsNumber } from './helper'
-import { AppConfig, DatabaseConfig } from './interfaces'
+import { AppConfig, DatabaseConfig, UploadConfig } from './interfaces'
+import path from 'path'
 
 dotenv.config({
     path: '.env.local'
@@ -23,4 +24,19 @@ export const DB: DatabaseConfig = {
     PASSWORD: getEnvParam('DB_PASSWORD', 'postgres'),
     MAX_POOL_COUNT: getEnvAsNumber('DB_MAX_POOL_COUNT', 10),
     CONN_TIME_OUT: getEnvAsNumber('CONN_TIME_OUT', 1000)
+}
+
+export const UPLOAD: UploadConfig = {
+    FULL_PATH: getEnvParam('FULL_PATH', process.cwd()),
+    MAIN_FOLDER: path.join(
+        getEnvParam('FULL_PATH', process.cwd()),
+        getEnvParam('MAIN_FOLDER', 'uploads')),
+    IMAGE_FOLDER_NAME_TO_SAVE: path.join(
+        getEnvParam('FULL_PATH', process.cwd()),
+        getEnvParam('MAIN_FOLDER', 'uploads'),
+        getEnvParam('IMAGE_FOLDER_NAME_TO_SAVE', 'images')),
+    IMAGE_INCOMING_KEY: getEnvParam('IMAGE_INCOMING_KEY', 'image'),
+    IMAGE_ALLOWED_TYPES: getEnvParam('IMAGE_ALLOWED_TYPES', 'jpeg, png, gif, bmp, tiff, svg+xml')
+        .split(',')
+        .map((imageType: string) => `image/${imageType.trim()}`),
 }

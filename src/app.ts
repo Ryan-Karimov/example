@@ -1,6 +1,5 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import helmet from 'helmet';
-import multer from 'multer';
 import cors from 'cors';
 import path from 'path';
 
@@ -16,13 +15,11 @@ const app: Express = express();
 /**
  * @CORS
  * @Helmet
- * @Multer
  * @JsonParser
  * @Registration_Middlewares
 */
 app.use(cors({ origin: '*' }));
 app.use(helmet());
-app.use(multer({ dest: './static/profileImages' }).any());
 app.use('/files', express.static(path.join(__dirname, 'static')));
 app.use(express.json({
     limit: '100MB'
@@ -35,7 +32,6 @@ app.use(express.json({
 */
 app.use('/', routes())
 // _______________________________________________________________
-
 
 // _______________________________________________________________
 /**
