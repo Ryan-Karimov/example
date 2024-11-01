@@ -9,3 +9,8 @@ export const createWorkspaceSchema = Joi.object({
 export const getWorkspacesSchema = Joi.object({
     owner_id: Joi.number().required().integer()
 })
+
+export const updateWorkspaceSchema = Joi.object({
+    id: Joi.number().required().integer()
+})
+

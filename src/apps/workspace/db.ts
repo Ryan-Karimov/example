@@ -22,4 +22,17 @@ export class WorkspaceDB {
         const result = await db.query(query, params);
         return result;
     }
+
+    static async updateWorkspaceById(params: Array<string>) {
+        const query = `
+            UPDATE workspace.workspaces
+            SET title, avatar
+            WHERE id = $1 and owner_id = $2;
+        `;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+
 }

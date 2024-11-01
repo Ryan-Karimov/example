@@ -22,4 +22,17 @@ export class WorkspaceService {
         });
         return;
     }
+
+    static async updateWorkspaceById(req: Request, res: Response) {
+        const { id, owner_id } = req.body;
+
+        const result = await WorkspaceDB.updateWorkspaceById([id, owner_id]);
+        res.status(200).json({
+            message: 'Workspace updated successful',
+            data: result
+        });
+        return;
+    }
+
+
 }
