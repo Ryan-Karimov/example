@@ -21,10 +21,11 @@ export function replaceAll(input: string, word: string, to: string = ''): string
     return input.split(word).join(to);
 }
 
-export function concatPaths(...values: string[]): string {
-    const path = values.map((value) => replaceAll(value, '/')).join('/');
-
-    return `/${path}`
+export function concatPaths(...parts: Array<string>): string {
+    const result = parts
+        .map(part => part.replace(/^\/+|\/+$/g, ''))
+        .join('/');
+    return `/${result}`
 }
 
 export function generateHexFromUUID4() {

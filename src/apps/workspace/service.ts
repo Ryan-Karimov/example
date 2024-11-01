@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { WorkspaceDB } from "./db";
 
 export class WorkspaceService {
-    static async createWorkspace(req: Request, res: Response) {
-        const { owner_id, title, avatar } = req.body;
+    static async createWorkspace(_req: Request, _res: Response) {
+        const { owner_id, title, avatar } = _req.body;
 
         await WorkspaceDB.createWorkspace([owner_id, title, avatar]);
-        res.status(200).json({
-            message: 'Workspace created successful'
+        _res.status(201).json({
+            message: 'Workspace created successfully!'
         });
         return;
     }
@@ -17,7 +17,7 @@ export class WorkspaceService {
 
         const result = await WorkspaceDB.getWorkspacesByOwnerId([owner_id]);
         res.status(200).json({
-            message: 'Workspaces received successful',
+            message: 'Workspaces received successfully!',
             data: result
         });
         return;
@@ -28,7 +28,7 @@ export class WorkspaceService {
 
         const result = await WorkspaceDB.updateWorkspaceById([id, owner_id]);
         res.status(200).json({
-            message: 'Workspace updated successful',
+            message: 'Workspace updated successfully!',
             data: result
         });
         return;

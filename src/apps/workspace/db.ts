@@ -5,8 +5,7 @@ export class WorkspaceDB {
         const query = `
             INSERT INTO workspace.workspaces (owner_id, title, avatar)
             VALUES ($1, $2, $3)
-            RETURNING id;
-        `;
+            RETURNING id;`;
 
         const result = await db.query(query, params);
         return result;
@@ -16,8 +15,7 @@ export class WorkspaceDB {
         const query = `
             SELECT id, title, avatar
             FROM workspace.workspaces
-            WHERE owner_id = $1;
-        `;
+            WHERE owner_id = $1;`;
 
         const result = await db.query(query, params);
         return result;
@@ -27,8 +25,7 @@ export class WorkspaceDB {
         const query = `
             UPDATE workspace.workspaces
             SET title, avatar
-            WHERE id = $1 and owner_id = $2;
-        `;
+            WHERE id = $1 and owner_id = $2;`;
 
         const result = await db.query(query, params);
         return result;

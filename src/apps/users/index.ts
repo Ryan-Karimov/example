@@ -10,7 +10,7 @@ export function usersRouteRegister(prefix: string, router: Router, ...middleware
     /**
      * @Registration_Middlewares
     */
-    router.use(concatPaths(prefix), middlewares.map((middleware) => middleware()))
+    if (middlewares.length !== 0) router.use(concatPaths(prefix), middlewares.map((middleware) => middleware()))
 
     /**
      * @Registration_Endpoints
