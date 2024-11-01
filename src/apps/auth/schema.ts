@@ -12,7 +12,6 @@ export const signUpSchema = Joi.object({
     gender: Joi.number().integer().valid(0, 1).required(),
     phone: Joi.string().max(16).required(),
     password: Joi.string().min(6).required(),
-    tariff_id: Joi.number().required()
 })
 
 export const signInSchema = Joi.object({
