@@ -13,7 +13,8 @@ export class TariffDB {
                 t.projects_limit,
                 t.files_limit
             FROM admin.tariffs t
-            JOIN admin.prices p ON t.price_id = p.id;`;
+            JOIN admin.prices p ON t.price_id = p.id
+            ORDER BY t.id;`;
 
         const result = await db.query(query);
         return result;

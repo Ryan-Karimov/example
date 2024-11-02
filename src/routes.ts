@@ -1,7 +1,12 @@
 import { Router } from 'express';
 import { authMiddleware } from './middlewares'
-import { authRouteRegister, usersRouteRegister, workspaceRouteRegister, projectRouteRegister } from './apps';
-import { tariffsRoute } from './apps/tariffs';
+
+import {
+    authRouteRegister,
+    usersRouteRegister,
+    workspaceRouteRegister,
+    tariffsRoute
+} from './apps';
 
 const mainRouter: Router = Router();
 
@@ -19,8 +24,7 @@ export default (): Router => {
     /*/                     ADD ROUTES TO API V1                /*/
     usersRouteRegister('users', apiV1Router, authMiddleware)
     workspaceRouteRegister('workspaces', apiV1Router, authMiddleware)
-    projectRouteRegister('projects', apiV1Router)
-    tariffsRoute('tariffs', apiV1Router)
+    tariffsRoute('tariffs', apiV1Router, authMiddleware)
     /*/ ________________________________________________________/*/
 
 

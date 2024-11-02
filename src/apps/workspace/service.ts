@@ -13,9 +13,9 @@ export class WorkspaceService {
     }
 
     static async getWorkspacesByOwnerId(req: Request, res: Response) {
-        const { owner_id } = req.body;
+        const { id } = req.params;
 
-        const result = await WorkspaceDB.getWorkspacesByOwnerId([owner_id]);
+        const result = await WorkspaceDB.getWorkspacesByOwnerId([id]);
         res.status(200).json({
             message: 'Workspaces received successfully!',
             data: result

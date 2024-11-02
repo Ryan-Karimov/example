@@ -2,12 +2,9 @@ import { checkEmailExistence } from 'advanced-email-existence';
 import { Request, Response } from 'express';
 import { PoolClient } from 'pg'
 
-import jwt from 'jsonwebtoken';
-
 import { db } from '../../db';
 import { AuthDB } from './db';
-import { APP } from '../../config';
-import { removeFile, hash, compare } from '../../helper'
+import { removeFile, hash, compare, GenerateJWToken } from '../../helper'
 
 export class AuthService {
     static async userSignUp(req: Request, res: Response) {
@@ -20,6 +17,7 @@ export class AuthService {
         }
 
         const uploadedFile = req.file as Express.Multer.File
+
         const isExistsPhoneNumber = await AuthDB.findUserByLogin([req.body.phone]);
         if (isExistsPhoneNumber.length !== 0) {
             if (uploadedFile) removeFile(uploadedFile.path);
@@ -29,17 +27,15 @@ export class AuthService {
 
         const isExistsEmail = await AuthDB.findUserByEmail([req.body.email]);
         if (isExistsEmail.length !== 0) {
-            if (uploadedFile) removeFile(uploadedFile.path);
             res.status(409).json({ message: 'A user with the same email address already exists!' });
+            if (uploadedFile) removeFile(uploadedFile.path);
             return;
         }
 
         const checkEmail = await checkEmailExistence(req.body.email);
         if (!checkEmail.valid) {
+            res.status(400).json({ message: 'Email does not exist or is invalid!' });
             if (uploadedFile) removeFile(uploadedFile.path);
-            res.status(400).json({
-                message: 'Email does not exist or is invalid!'
-            });
             return;
         }
 
@@ -75,17 +71,12 @@ export class AuthService {
             return;
         }
 
-        const token = jwt.sign(
-            {
+        res.status(200).json({
+            message: 'Sign-in successfully!',
+            token: GenerateJWToken({
                 id: user[0].id,
                 login: user[0].login
-            },
-            APP.JWT_SECRET_KEY,
-            { expiresIn: '10h' }
-        );
-        res.status(200).json({
-            message: 'Sign-in successful',
-            token: token
+            })
         });
         return;
     }

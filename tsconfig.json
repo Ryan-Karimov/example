@@ -12,8 +12,8 @@
         "noImplicitAny": false,
     },
     "include": [
-        "src/**/*",
-        // "types"
+        "src",
+        "types/express.d.ts",
     ],
     "exclude": [
         "node_modules"

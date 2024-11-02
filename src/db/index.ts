@@ -30,23 +30,23 @@ class Db {
             connectionTimeoutMillis: options.conn_time_out,
         });
 
-        this.pool.on('connect', () => {
-            console.log('User is connected to DB!');
-        })
+        // this.pool.on('connect', () => {
+        //     console.log('User is connected to DB!');
+        // })
 
-        this.pool.on('error', () => {
-            console.log('Error on DB!');
-        })
+        // this.pool.on('error', () => {
+        //     console.log('Error on DB!');
+        // })
 
-        this.pool.on('remove', () => {
-            console.log('Removed pool from DB!');
-        })
+        // this.pool.on('remove', () => {
+        //     console.log('Removed pool from DB!');
+        // })
 
         this.pool
     }
 
-    public logging(...messages: any[]): void {
-        console.log(messages);
+    private logging(...messages: any[]): void {
+        // console.log(messages);
     }
 
     public static getInstance(): Db {

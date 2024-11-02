@@ -41,7 +41,11 @@ export function getFileDirnaeAndBasename(fileFullPath: string) {
 }
 
 export function removeFile(fullFilePath: string) {
-    fs.rmdir(fullFilePath, (_err) => {
-        console.log(`File not found to delete as: ${fullFilePath}`);
-    })
+    fs.unlink(fullFilePath, (err) => {
+        if (err) {
+            console.error(`Error deleting file: ${err.message}`);
+            return;
+        }
+        console.log('File deleted successfully');
+    });
 }
