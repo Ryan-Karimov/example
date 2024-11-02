@@ -9,11 +9,11 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "moduleResolution": "node",
-        "noImplicitAny": false
+        "noImplicitAny": false,
     },
     "include": [
-        "src/**/*",
-        // "types/**/*"
+        "src",
+        "types/express.d.ts",
     ],
     "exclude": [
         "node_modules"

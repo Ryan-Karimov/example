@@ -1,8 +1,9 @@
-import { Request } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+import { Request } from "express";
 
-declare module 'express' {
-    export interface Request {
-        file?: Express.Multer.File;
-        files?: Express.Multer.File[];
+
+declare module "express" {
+    interface Request {
+        user: JwtPayload;
     }
 }
