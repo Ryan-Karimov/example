@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, RequestHandler } from 'express'
 
-interface GlobalNotFoundMiddleWare {
-    (req: Request, res: Response, next: NextFunction): Promise<void>
-}
+// interface GlobalNotFoundMiddleWare {
+//     (req: Request, res: Response, next: NextFunction): Promise<void>
+// }
 
-export function GlobalNotFoundHandlerMiddleWare(): GlobalNotFoundMiddleWare {
+export function GlobalNotFoundHandlerMiddleWare(): any {
     return async (_req: Request, _res: Response, _next: NextFunction): Promise<void> => {
         console.log(_req.path, _req.baseUrl);
 
@@ -14,11 +14,11 @@ export function GlobalNotFoundHandlerMiddleWare(): GlobalNotFoundMiddleWare {
     }
 }
 
-interface GlobalErrorHandlerMiddleWare {
-    (error: Error, req: Request, res: Response, next: NextFunction): Promise<void>
-}
+// interface GlobalErrorHandlerMiddleWare {
+//     (error: Error, req: Request, res: Response, next: NextFunction): Promise<void>
+// }
 
-export function GlobalErrorHandlerMiddleWare(): GlobalErrorHandlerMiddleWare {
+export function GlobalErrorHandlerMiddleWare(): any {
     return async (_error: Error, _req: Request, _res: Response, _next: NextFunction): Promise<void> => {
         console.log(_error);
 

@@ -1,10 +1,5 @@
-import { Router, NextFunction } from 'express';
-import { concatPaths, UploadFileHandler } from '../../helper'
-
-import { UPLOAD } from '../../config'
-import { UserService } from './service'
-import { UserController } from './controller'
-// import { signUpSchema, signInSchema } from './schema'
+import { Router } from 'express';
+import { concatPaths } from '../../helper'
 
 export function usersRouteRegister(prefix: string, router: Router, ...middlewares: Array<CallableFunction>): void {
     /**
@@ -19,6 +14,5 @@ export function usersRouteRegister(prefix: string, router: Router, ...middleware
         res.send({
             msg: "Response is succescfully!"
         })
-    }
-    );
+    });
 }

@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { WorkspaceDB } from "./db";
 
 export class WorkspaceService {
     static async createWorkspace(_req: Request, _res: Response) {
-        const { owner_id, title, avatar } = _req.body;
+        const { title, avatar } = _req.body;
+        const userId = _req.user.id
 
-        await WorkspaceDB.createWorkspace([owner_id, title, avatar]);
+        await WorkspaceDB.createWorkspace([userId, title, avatar]);
         _res.status(201).json({
             message: 'Workspace created successfully!'
         });

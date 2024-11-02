@@ -10,7 +10,7 @@ export interface IUserData {
 
 interface IVerify {
     isNotVerified?: boolean;
-    value?: IUserData;
+    value: IUserData;
 }
 
 export function GenerateJWToken(payload: IUserData): string {
@@ -27,7 +27,7 @@ export function VerifyJWToken(token: string): IVerify {
         return { value: decode as IUserData }
     }
     catch (err) {
-        return { isNotVerified: true }
+        return { isNotVerified: true, value: { id: 0, login: '' } }
     }
 
 }

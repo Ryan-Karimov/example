@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { VerifyJWToken } from '../helper'
+import express from '../../types/express'
 
 
 export const authMiddleware = (): CallableFunction =>
@@ -19,8 +20,6 @@ export const authMiddleware = (): CallableFunction =>
             });
             return;
         }
-
-        req.headers['user-id'] = value?.id.toString()
-        req.headers['user-login'] = value?.login.toString()
+        req.user = value;
         next()
     };
