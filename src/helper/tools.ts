@@ -37,7 +37,6 @@ export function JoiDate(format: string, msg?: string) {
 
     return Joi.string().custom((value, helpers) => {
         if (moment(value, format, true).isValid()) {
-            // Invalid date
             return value;
         } else {
             return helpers.error('any.invalid');

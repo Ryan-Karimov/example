@@ -14,5 +14,9 @@ export const getWorkspacesSchema = Joi.object({
 })
 
 export const updateWorkspaceSchema = Joi.object({
-    id: Joi.number().integer().required()
+    body: Joi.object({
+        id: Joi.number().integer().required(),
+        title: Joi.string().max(64).optional(),
+        avatar: Joi.string().optional()
+    }).required()
 })

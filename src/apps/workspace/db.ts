@@ -24,8 +24,9 @@ export class WorkspaceDB {
     static async updateWorkspaceById(params: Array<string>) {
         const query = `
             UPDATE workspace.workspaces
-            SET title, avatar
-            WHERE id = $1 and owner_id = $2;`;
+            SET title = $2, avatar = COALESCE($3, avatar)
+            WHERE id = $1
+            RETURNING id, title, avatar;`;
 
         const result = await db.query(query, params);
         return result;

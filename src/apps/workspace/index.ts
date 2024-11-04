@@ -16,7 +16,7 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
             WorkspaceService.createWorkspace,
             createWorkspaceSchema));
 
-    router.get(concatPaths(prefix),
+    router.get(concatPaths(prefix, ':id'),
         Controller(
             WorkspaceService.getWorkspacesByOwnerId,
             getWorkspacesSchema));

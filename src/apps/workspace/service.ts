@@ -4,7 +4,7 @@ import { WorkspaceDB } from "./db";
 export class WorkspaceService {
     static async createWorkspace(_req: Request, _res: Response) {
         const { title, avatar } = _req.body;
-        const userId = _req.user.id
+        const userId = _req.user.id;
 
         await WorkspaceDB.createWorkspace([userId, title, avatar]);
         _res.status(201).json({
@@ -25,15 +25,13 @@ export class WorkspaceService {
     }
 
     static async updateWorkspaceById(req: Request, res: Response) {
-        const { id, owner_id } = req.body;
+        const { id, title, avatar } = req.body;
 
-        const result = await WorkspaceDB.updateWorkspaceById([id, owner_id]);
+        const result = await WorkspaceDB.updateWorkspaceById([id, title, avatar]);
         res.status(200).json({
             message: 'Workspace updated successfully!',
             data: result
         });
         return;
     }
-
-
 }
