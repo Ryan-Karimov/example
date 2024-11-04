@@ -1,7 +1,7 @@
 import { db } from "../../db"
 
 export class UsersDB {
-    static async getMe(params: Array<string>) {
+    static async getMe(params: Array<any>) {
         const query = `
             SELECT
                 id,
@@ -11,8 +11,10 @@ export class UsersDB {
                 email,
                 image_url,
                 gender
-            FROM public.users
-            WHERE id = $1;`;
+            FROM
+                public.users
+            WHERE
+                id = $1;`;
 
         const result = await db.query(query, params);
         return result;

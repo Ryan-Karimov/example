@@ -11,27 +11,39 @@ export class WorkspaceService {
             message: 'Workspace created successfully!'
         });
         return;
-    }
+    } // DONE
 
-    static async getWorkspacesByOwnerId(req: Request, res: Response) {
-        const { id } = req.params;
+    static async getWorkspacesByOwnerId(_req: Request, _res: Response) {
+        const userId = _req.user.id;
 
-        const result = await WorkspaceDB.getWorkspacesByOwnerId([id]);
-        res.status(200).json({
-            message: 'Workspaces received successfully!',
+        const result = await WorkspaceDB.getWorkspacesByOwnerId([userId]);
+        _res.status(200).json({
+            message: 'Workspaces successfully get!',
             data: result
         });
         return;
-    }
+    } // DONE
 
-    static async updateWorkspaceById(req: Request, res: Response) {
-        const { id, title, avatar } = req.body;
+    static async updateWorkspaceById(_req: Request, _res: Response) {
+        const { title, avatar } = _req.body;
+        const { id } = _req.params;
 
         const result = await WorkspaceDB.updateWorkspaceById([id, title, avatar]);
-        res.status(200).json({
-            message: 'Workspace updated successfully!',
+        _res.status(200).json({
+            message: 'Workspace successfully updated!',
             data: result
         });
         return;
-    }
+    } // DONE
+
+    static async deleteWorkspaceById(_req: Request, _res: Response) {
+        const { id } = _req.params;
+
+        const result = await WorkspaceDB.deleteWorkspaceById([id]);
+        _res.status(200).json({
+            message: 'Workspace successfully deleted!',
+            data: result
+        });
+        return;
+    } // DONE
 }

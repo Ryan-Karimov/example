@@ -7,7 +7,7 @@ export class UserService {
 
         const result = await UsersDB.getMe([userId])
         _res.status(200).json({
-            message: 'User received successfully!',
+            message: 'User successfully received!',
             data: result
         });
         return;

@@ -11,9 +11,9 @@ export function usersRouteRegister(prefix: string, router: Router, ...middleware
     /**
      * @Registration_Endpoints
     */
-    router.get(concatPaths(prefix, '/getMe'),
+    router.get(concatPaths(prefix),
         Controller(
             UserService.getMe,
-            undefined)
+        )
     );
 }

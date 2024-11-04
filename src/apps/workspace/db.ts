@@ -13,9 +13,13 @@ export class WorkspaceDB {
 
     static async getWorkspacesByOwnerId(params: Array<string>) {
         const query = `
-            SELECT id, title, avatar
-            FROM workspace.workspaces
-            WHERE owner_id = $1;`;
+            SELECT
+                id, title, avatar
+            FROM
+                workspace.workspaces
+            WHERE
+                owner_id = $1
+                AND is_active;`;
 
         const result = await db.query(query, params);
         return result;
@@ -23,10 +27,28 @@ export class WorkspaceDB {
 
     static async updateWorkspaceById(params: Array<string>) {
         const query = `
-            UPDATE workspace.workspaces
-            SET title = $2, avatar = COALESCE($3, avatar)
-            WHERE id = $1
-            RETURNING id, title, avatar;`;
+            UPDATE
+                workspace.workspaces
+            SET
+                title = COALESCE($2, title),
+                avatar = COALESCE($3, avatar)
+            WHERE
+                id = $1
+            RETURNING
+                id, title, avatar;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+    static async deleteWorkspaceById(params: Array<string>) {
+        const query = `
+            UPDATE
+                workspace.workspaces
+            SET
+                is_active = false
+            WHERE
+                id = $1;`;
 
         const result = await db.query(query, params);
         return result;
