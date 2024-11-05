@@ -10,15 +10,15 @@ import {
 
 const mainRouter: Router = Router();
 
-const apiV1Path = '/api/v1'
-const apiV2Path = '/api/v2'
+const apiV1Path = '/api/v1';
+const apiV2Path = '/api/v2';
 
 const apiV1Router: Router = Router();
 const apiV2Router: Router = Router();
 
 
 export default (): Router => {
-    authRouteRegister('auth', mainRouter)
+    authRouteRegister(`${apiV1Path}/auth`, mainRouter)
 
     /*/ ________________________________________________________/*/
     /*/                     ADD ROUTES TO API V1                /*/

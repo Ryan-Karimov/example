@@ -41,8 +41,7 @@ export class WorkspaceService {
 
         const result = await WorkspaceDB.deleteWorkspaceById([id]);
         _res.status(200).json({
-            message: 'Workspace successfully deleted!',
-            data: result
+            message: 'Workspace successfully deleted!'
         });
         return;
     } // DONE

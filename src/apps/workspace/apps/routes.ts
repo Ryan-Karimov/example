@@ -11,5 +11,5 @@ export default () => {
     router.use(concatPaths('dashboard'), dashboardRoute())
     router.use(concatPaths('projects'), projectRoute())
     router.use(concatPaths('users'), userRoute())
-    return router
+    return router;
 };
