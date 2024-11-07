@@ -5,7 +5,7 @@ import dashboardRoute from './dashboard'
 import projectRoute from './projects'
 import userRoute from './users'
 
-const router = Router()
+const router = Router({ mergeParams: true })
 
 export default () => {
     router.use(concatPaths('dashboard'), dashboardRoute())

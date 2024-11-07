@@ -5,7 +5,8 @@ import {
     authRouteRegister,
     usersRouteRegister,
     workspaceRouteRegister,
-    tariffsRoute
+    tariffsRoute,
+    adminRoutes
 } from './apps';
 
 const mainRouter: Router = Router();
@@ -26,6 +27,7 @@ export default (): Router => {
     workspaceRouteRegister('workspaces', apiV1Router, authMiddleware)
     tariffsRoute('tariffs', apiV1Router, authMiddleware)
     /*/ ________________________________________________________/*/
+    adminRoutes('admin', apiV1Router, authMiddleware)
 
 
     /**

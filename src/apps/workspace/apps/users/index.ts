@@ -1,8 +1,22 @@
 import { Router } from 'express'
-import { concatPaths } from '../../../../helper';
+import { concatPaths, Controller } from '../../../../helper';
+import { UserService } from './service';
+import { addUserToWorkspace, getUsersByWorkspace } from './schema';
 
-const router = Router()
+const router = Router({ mergeParams: true })
 
 export default () => {
-    return router
+    router.get(concatPaths('/'),
+        Controller(
+            UserService.getUsersByWorkspace,
+            getUsersByWorkspace
+        ));
+
+    router.post(concatPaths('/'),
+        Controller(
+            UserService.addUserToWorkspace,
+            addUserToWorkspace
+        ));
+
+    return router;
 };

@@ -32,5 +32,7 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
             WorkspaceService.deleteWorkspaceById,
             deleteWorkspaceSchema));                            // TO DELETE THE WORKSPACE
 
+    console.log(concatPaths(prefix, ':id'));
+
     router.use(concatPaths(prefix, ':id'), workspaceRoute())    // REGISTRATION WORKSPACE APPS
 }
