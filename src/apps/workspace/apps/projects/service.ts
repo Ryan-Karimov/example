@@ -16,10 +16,11 @@ export class ProjectService {
         const { id } = _req.params;
         const { title, current_price, type_id } = _req.body;
 
-        const result = await ProjectDB.createProject([id, title, current_price, type_id]);
+        const createdProject = await ProjectDB.createProject([id, title, current_price, type_id]);
+        const project = await ProjectDB.getProjectById([createdProject[0].id])
         _res.status(201).json({
             message: 'Project created successfully',
-            data: result
+            data: project
         });
     };
 
@@ -39,6 +40,16 @@ export class ProjectService {
         await ProjectDB.deleteProject([id, projectId]);
         _res.status(200).json({
             message: 'Project deleted successfully'
+        });
+    };
+
+    static async getProjectById(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+
+        const result = await ProjectDB.getProjectById([projectId]);
+        _res.status(200).json({
+            message: 'Project retrieved successfully',
+            data: result
         });
     };
 }

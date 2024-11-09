@@ -2,7 +2,6 @@ import { db } from '../../../../db'
 
 export class ProjectDB {
     static async getProjects(params: Array<any>): Promise<void> {
-
         const query = `
             SELECT
                 p.id,
@@ -25,7 +24,7 @@ export class ProjectDB {
         const query = `
             INSERT INTO workspace.projects (workspace_id, title, current_price, type_id)
             VALUES ($1, $2, $3, $4)
-            RETURNING id;`;
+            RETURNING id, title, current_price;`;
 
         const result = await db.query(query, params);
         return result;
@@ -58,5 +57,23 @@ export class ProjectDB {
                 id = $2;`;
 
         await db.query(query, params);
+    }
+
+    static async getProjectById(params: Array<string>): Promise<void> {
+        const query = `
+            SELECT
+                p.id,
+                p.title,
+                p.current_price,
+                pt.title AS type
+            FROM
+                workspace.projects p
+            JOIN
+                admin.project_types pt ON p.type_id = pt.id
+            WHERE
+                p.id = $1;`;
+
+        const result = await db.query(query, params);
+        return result;
     }
 }

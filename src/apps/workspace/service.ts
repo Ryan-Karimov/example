@@ -6,9 +6,10 @@ export class WorkspaceService {
         const { title, avatar } = _req.body;
         const userId = _req.user.id;
 
-        await WorkspaceDB.createWorkspace([userId, title, avatar]);
+        const result = await WorkspaceDB.createWorkspace([userId, title, avatar]);
         _res.status(201).json({
-            message: 'Workspace created successfully!'
+            message: 'Workspace created successfully!',
+            data: result
         });
         return;
     } // DONE
@@ -42,6 +43,17 @@ export class WorkspaceService {
         const result = await WorkspaceDB.deleteWorkspaceById([id]);
         _res.status(200).json({
             message: 'Workspace successfully deleted!'
+        });
+        return;
+    } // DONE
+
+    static async getWorkspaceById(_req: Request, _res: Response) {
+        const { id } = _req.params;
+
+        const result = await WorkspaceDB.getWorkspaceById([id]);
+        _res.status(200).json({
+            message: 'Workspace successfully get!',
+            data: result
         });
         return;
     } // DONE

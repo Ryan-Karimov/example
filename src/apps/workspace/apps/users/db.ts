@@ -17,7 +17,9 @@ export class UsersByWorkspaceDB {
             WHERE
                 p.workspace_id = $1
             AND 
-                u.is_active;`;
+                u.is_active
+            GROUP BY
+                u.id, u.last_name, u.first_name, u.image_url;`;
 
         const result = await db.query(query, params);
         return result;

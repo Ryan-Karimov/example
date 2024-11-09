@@ -39,3 +39,10 @@ export const deleteProjectSchema = Joi.object({
         projectId: Joi.number().integer().min(1).required()
     }).required()
 })
+
+export const getProjectSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+        projectId: Joi.number().integer().min(1).required()
+    }).required()
+})

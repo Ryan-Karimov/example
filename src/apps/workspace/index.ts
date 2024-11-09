@@ -5,7 +5,8 @@ import { concatPaths, Controller } from '../../helper';
 import {
     createWorkspaceSchema,
     updateWorkspaceSchema,
-    deleteWorkspaceSchema
+    deleteWorkspaceSchema,
+    getWorkspaceSchema
 } from "./schema";
 
 import workspaceRoute from './apps/routes'
@@ -31,6 +32,11 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
         Controller(
             WorkspaceService.deleteWorkspaceById,
             deleteWorkspaceSchema));                            // TO DELETE THE WORKSPACE
+
+    router.get(concatPaths(prefix, ':id'),
+        Controller(
+            WorkspaceService.getWorkspaceById,
+            getWorkspaceSchema));                               // TO GET WORKSPACE BY ID
 
     console.log(concatPaths(prefix, ':id'));
 

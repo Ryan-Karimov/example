@@ -23,3 +23,9 @@ export const deleteWorkspaceSchema = Joi.object({
         id: Joi.number().integer().min(1).required(),
     }).required()
 })
+
+export const getWorkspaceSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+    }).required()
+})

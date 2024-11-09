@@ -5,7 +5,7 @@ export class WorkspaceDB {
         const query = `
             INSERT INTO workspace.workspaces (owner_id, title, avatar)
             VALUES ($1, $2, $3)
-            RETURNING id;`;
+            RETURNING id, title, avatar;`;
 
         const result = await db.query(query, params);
         return result;
@@ -54,5 +54,17 @@ export class WorkspaceDB {
         return result;
     }
 
+    static async getWorkspaceById(params: Array<string>) {
+        const query = `
+            SELECT
+                id, title, avatar
+            FROM
+                workspace.workspaces
+            WHERE
+                id = $1
+                AND is_active;`;
 
+        const result = await db.query(query, params);
+        return result;
+    }
 }

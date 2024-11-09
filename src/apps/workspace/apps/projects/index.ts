@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { concatPaths, Controller } from '../../../../helper';
-import { createProjectSchema, deleteProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
+import { createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
 import { ProjectService } from './service'
 
 const router = Router({ mergeParams: true })
@@ -30,6 +30,12 @@ export default () => {
             ProjectService.deleteProject,
             deleteProjectSchema
         ));                                             // TO DELETE A PROJECT BY PROJECT ID
+
+    router.get(concatPaths(':projectId'),
+        Controller(
+            ProjectService.getProjectById,
+            getProjectSchema
+        ));
 
     return router;
 };
