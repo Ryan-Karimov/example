@@ -46,3 +46,13 @@ export const getProjectSchema = Joi.object({
         projectId: Joi.number().integer().min(1).required()
     }).required()
 })
+
+export const getWorkspaceUsersSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+    }).required(),
+    query: Joi.object({
+        limit: Joi.number().integer().min(10).default(10).optional(),
+        offset: Joi.number().integer().min(0).default(0).optional(),
+    }).required()
+})
