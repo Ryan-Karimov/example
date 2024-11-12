@@ -29,9 +29,7 @@ export class UserService {
             return;
         }
 
-        for (const project_id of project_ids) {
-            await UsersByWorkspaceDB.addUserToWorkspace([isExistsEmail[0].id, project_id, role_id])
-        }
+        await UsersByWorkspaceDB.addUserToWorkspace([isExistsEmail[0].id, project_ids, role_id])
 
         _res.status(201).json({
             message: 'User added to projects successfully'

@@ -35,7 +35,7 @@ export default () => {
         Controller(
             ProjectService.getProjectById,
             getProjectSchema
-        ));
+        ));                                             // TO GET A PROJECT DETAILS BY PROJECT ID
 
     return router;
 };

@@ -10,13 +10,13 @@ export default () => {
         Controller(
             UserService.getUsersByWorkspace,
             getUsersByWorkspace
-        ));
+        ));                                                     // TO GET USERS IN A SPECIFIC WORKSPACE
 
     router.post(concatPaths('/'),
         Controller(
             UserService.addUserToWorkspace,
             addUserToWorkspace
-        ));
+        ));                                                     // TO ADD A USER TO A SPECIFIC WORKSPACE
 
     return router;
 };
