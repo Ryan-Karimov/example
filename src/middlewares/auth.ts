@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { hasAccessToWorkspaceAndProject, VerifyJWToken } from '../helper';
+import { VerifyJWToken } from '../helper';
 import express from '../../types/express'
 import { WorkspaceDB } from '../apps/workspace/db';
 
