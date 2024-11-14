@@ -78,4 +78,13 @@ export class WorkspaceService {
         const result = await WorkspaceDB.checkWorkspacePermission([id]);
         return result;
     } // DONE
+
+    static async getRoles(_req: Request, _res: Response) {
+        const result = await WorkspaceDB.getRoles();
+        _res.status(200).json({
+            message: 'Roles get successfully!',
+            data: result
+        });
+        return;
+    } //DONE
 }

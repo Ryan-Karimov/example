@@ -87,7 +87,9 @@ export class ProjectDB {
             JOIN
                 admin.project_types pt ON p.type_id = pt.id
             WHERE
-                p.id = $1;`;
+                p.workspace_id = $1
+            AND
+                p.id = $2;`;
 
         const result = await db.query(query, params);
         return result;
@@ -156,11 +158,66 @@ export class ProjectDB {
             JOIN
                 workspace.projects p ON p.id = up.project_id
             WHERE
-                p.workspace_id = $1 and up.project_id != $2
+                p.workspace_id = $1 AND up.project_id != $2
+            AND
+                u.is_active
+            GROUP BY
+                u.id
+            ORDER BY
+                u.id;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+    static async getUserByProject(params: Array<string>) {
+        const query = `
+            SELECT
+                u.id,
+                u.last_name,
+                u.first_name,
+                u.email,
+                u.image_url
+            FROM
+                public.users u
+            JOIN
+                workspace.user_projects up ON up.user_id = u.id
+            JOIN
+                workspace.projects p ON p.id = up.project_id
+            WHERE
+                p.workspace_id = $1 
+            AND 
+                up.project_id = $2 
+            AND
+                u.email = $3
             AND
                 u.is_active
             GROUP BY
                 u.id;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+    static async addUsersToProject(params: Array<any>) {
+        const query = `
+            INSERT INTO workspace.user_projects (user_id, project_id, role_id)
+            SELECT unnest($1::integer[]), $2, $3;`;
+
+        const result = await db.query(query, params);
+        return result;
+    };
+
+    static async getClassesByProject(params: Array<string>): Promise<void> {
+        const query = `
+            SELECT
+                *
+            FROM 
+                workspace.classes c
+            WHERE
+                c.project_id = $1
+            ORDER BY
+                c.id;`;
 
         const result = await db.query(query, params);
         return result;

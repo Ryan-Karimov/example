@@ -104,4 +104,15 @@ export class WorkspaceDB {
         const result = await db.query(query, params);
         return result;
     }
+
+    static async getRoles() {
+        const query = `
+            SELECT
+                *
+            FROM
+                workspace.roles;`;
+
+        const result = await db.query(query);
+        return result;
+    }
 }

@@ -24,13 +24,4 @@ export class UsersByWorkspaceDB {
         const result = await db.query(query, params);
         return result;
     };
-
-    static async addUserToWorkspace(params: Array<any>) {
-        const query = `
-            INSERT INTO workspace.user_projects (user_id, project_id, role_id)
-            SELECT $1, unnest($2::integer[]), $3;`;
-
-        const result = await db.query(query, params);
-        return result;
-    };
 }

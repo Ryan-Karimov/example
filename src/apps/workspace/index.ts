@@ -21,6 +21,11 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
             WorkspaceService.createWorkspace,
             createWorkspaceSchema));                            // TO CREATE A NEW WORKSPACE
 
+    router.get(concatPaths(prefix, 'roles'),
+        Controller(
+            WorkspaceService.getRoles
+        ));                                                     // TO GET ALL ROLES
+
     router.get(concatPaths(prefix),
         Controller(
             WorkspaceService.getWorkspacesByOwnerId));          // TO GET ALL WORKSPACES LIST

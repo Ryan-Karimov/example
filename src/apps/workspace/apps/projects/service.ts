@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { checkEmailExistence } from 'advanced-email-existence';
 import { ProjectDB } from './db'
 
 export class ProjectService {
@@ -31,6 +32,7 @@ export class ProjectService {
             message: 'Project created successfully',
             data: project
         });
+        return;
     };
 
     static async updateProject(_req: Request, _res: Response): Promise<void> {
@@ -62,26 +64,8 @@ export class ProjectService {
 
     static async getProjectById(_req: Request, _res: Response): Promise<void> {
         const { id, projectId } = _req.params;
-        const { meta, newUsers } = _req.query;
-        if (meta) {
-            const result = await ProjectDB.getFilesCountByProject([id, projectId]);
-            _res.status(200).json({
-                message: 'Files count by project retrieved successfully',
-                data: result[0]
-            });
-            return;
-        }
 
-        if (newUsers) {
-            const result = await ProjectDB.getUsersNotInProject([id, projectId]);
-            _res.status(200).json({
-                message: 'Successfully retrieved list of users not in the project',
-                data: result[0]
-            });
-            return;
-        }
-
-        const result = await ProjectDB.getProjectById([projectId]);
+        const result = await ProjectDB.getProjectById([id, projectId]);
         _res.status(200).json({
             message: 'Project retrieved successfully',
             data: result[0]
@@ -92,5 +76,71 @@ export class ProjectService {
         _res.status(200).json({
             message: 'Successful'
         });
+    }
+
+    static async getFileCountByStatus(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+
+        const result = await ProjectDB.getFilesCountByProject([id, projectId]);
+        _res.status(200).json({
+            message: 'Files count by project retrieved successfully',
+            data: result[0]
+        });
+        return;
+    }
+
+    static async getUsersNotInProject(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+
+        const result = await ProjectDB.getUsersNotInProject([id, projectId]);
+        _res.status(200).json({
+            message: 'Successfully retrieved list of users not in the project',
+            data: result[0]
+        });
+        return;
+    }
+
+    static async checkEmail(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+        const { email } = _req.body;
+
+        const isExistsEmail = await ProjectDB.getUserByProject([id, projectId, email]);
+        if (isExistsEmail.length !== 0) {
+            _res.status(409).json({ message: 'A user with the same email address already exists!' });
+            return;
+        }
+
+        const checkEmail = await checkEmailExistence(email);
+        if (!checkEmail.valid) {
+            _res.status(400).json({ message: 'Email does not exist or is invalid!' });
+            return;
+        }
+
+        _res.status(200).json({
+            message: 'The email address is valid and available for use in the project'
+        });
+        return;
+    }
+
+    static async addUsers(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+        const { email, role_id, users } = _req.body;
+
+        await ProjectDB.addUsersToProject([users, projectId, role_id]);
+        _res.status(201).json({
+            message: 'Users were successfully added to the project'
+        });
+        return;
+    }
+
+    static async getClassesByProject(_req: Request, _res: Response): Promise<void> {
+        const { id, projectId } = _req.params;
+
+        const result = await ProjectDB.getClassesByProject([projectId])
+        _res.status(200).json({
+            message: 'List of classes retrieved successfully',
+            data: result
+        });
+        return;
     }
 }

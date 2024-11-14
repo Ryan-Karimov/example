@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { concatPaths, Controller } from '../../../../helper';
-import { createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
+import { addUserSChema, checkEmailSchema, createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
 import { ProjectService } from './service'
 
 const router = Router({ mergeParams: true })
@@ -40,6 +40,36 @@ export default () => {
     router.post(concatPaths(':projectId'),
         Controller(
             ProjectService.createProject
+        ));
+
+    router.get(concatPaths(':projectId', 'meta'),
+        Controller(
+            ProjectService.getFileCountByStatus,
+            getProjectSchema
+        ));
+
+    router.get(concatPaths(':projectId', 'new-users'),
+        Controller(
+            ProjectService.getUsersNotInProject,
+            getProjectSchema
+        ));
+
+    router.post(concatPaths(':projectId', 'check-email'),
+        Controller(
+            ProjectService.checkEmail,
+            checkEmailSchema
+        ));
+
+    router.post(concatPaths(':projectId', 'add-users'),
+        Controller(
+            ProjectService.addUsers,
+            addUserSChema
+        ));
+
+    router.get(concatPaths(':projectId', 'classes'),
+        Controller(
+            ProjectService.getClassesByProject,
+            getProjectSchema
         ));
 
     return router;
