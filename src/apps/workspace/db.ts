@@ -90,4 +90,18 @@ export class WorkspaceDB {
         const result = await db.query(query, params);
         return parseInt(result[0].count) > 0;
     }
+
+    static async checkWorkspacePermission(params: Array<string>) {
+        const query = `
+            SELECT
+                owner_id
+            FROM
+                workspace.workspaces
+            WHERE
+                id = $1
+                AND is_active;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
 }

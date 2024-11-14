@@ -73,4 +73,9 @@ export class WorkspaceService {
         });
         return;
     } // DONE
+
+    static async checkWorkspacePermission(id) {
+        const result = await WorkspaceDB.checkWorkspacePermission([id]);
+        return result;
+    } // DONE
 }

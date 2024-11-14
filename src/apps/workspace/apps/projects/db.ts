@@ -140,4 +140,29 @@ export class ProjectDB {
         const result = await db.query(query, params);
         return result;
     }
+
+    static async getUsersNotInProject(params: Array<string>): Promise<void> {
+        const query = `
+            SELECT
+                u.id,
+                u.last_name,
+                u.first_name,
+                u.email,
+                u.image_url
+            FROM
+                public.users u
+            JOIN
+                workspace.user_projects up ON up.user_id = u.id
+            JOIN
+                workspace.projects p ON p.id = up.project_id
+            WHERE
+                p.workspace_id = $1 and up.project_id != $2
+            AND
+                u.is_active
+            GROUP BY
+                u.id;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
 }

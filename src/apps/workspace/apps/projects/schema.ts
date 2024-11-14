@@ -48,5 +48,6 @@ export const getProjectSchema = Joi.object({
     }).required(),
     query: Joi.object({
         meta: Joi.boolean().default(false).optional(),
+        newUsers: Joi.boolean().default(false).optional(),
     }).optional()
 })

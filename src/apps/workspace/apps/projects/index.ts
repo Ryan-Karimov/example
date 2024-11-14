@@ -37,5 +37,10 @@ export default () => {
             getProjectSchema
         ));                                             // TO GET A PROJECT DETAILS BY PROJECT ID
 
+    router.post(concatPaths(':projectId'),
+        Controller(
+            ProjectService.createProject
+        ));
+
     return router;
 };

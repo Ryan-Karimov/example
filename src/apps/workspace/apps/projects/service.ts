@@ -62,11 +62,20 @@ export class ProjectService {
 
     static async getProjectById(_req: Request, _res: Response): Promise<void> {
         const { id, projectId } = _req.params;
-        const { meta } = _req.query;
+        const { meta, newUsers } = _req.query;
         if (meta) {
             const result = await ProjectDB.getFilesCountByProject([id, projectId]);
             _res.status(200).json({
                 message: 'Files count by project retrieved successfully',
+                data: result[0]
+            });
+            return;
+        }
+
+        if (newUsers) {
+            const result = await ProjectDB.getUsersNotInProject([id, projectId]);
+            _res.status(200).json({
+                message: 'Successfully retrieved list of users not in the project',
                 data: result[0]
             });
             return;
@@ -78,4 +87,10 @@ export class ProjectService {
             data: result[0]
         });
     };
+
+    static async addUserToProject(_req: Request, _res: Response): Promise<void> {
+        _res.status(200).json({
+            message: 'Successful'
+        });
+    }
 }
