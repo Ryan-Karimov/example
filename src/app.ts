@@ -20,7 +20,7 @@ const app: Express = express();
 */
 app.use(cors({ origin: '*' }));
 app.use(helmet());
-app.use('/files', express.static(path.join(__dirname, 'static')));
+app.use('/static', express.static(path.join(__dirname, '..', 'static')));
 app.use(express.json({
     limit: '100MB'
 }));

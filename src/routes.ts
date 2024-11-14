@@ -9,13 +9,13 @@ import {
     adminRoutes
 } from './apps';
 
-const mainRouter: Router = Router();
+const mainRouter: Router = Router({ mergeParams: true });
 
 const apiV1Path = '/api/v1';
 const apiV2Path = '/api/v2';
 
-const apiV1Router: Router = Router();
-const apiV2Router: Router = Router();
+const apiV1Router: Router = Router({ mergeParams: true });
+const apiV2Router: Router = Router({ mergeParams: true });
 
 
 export default (): Router => {

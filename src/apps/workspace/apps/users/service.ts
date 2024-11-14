@@ -13,28 +13,4 @@ export class UserService {
             data: result
         });
     };
-
-    static async addUserToWorkspace(_req: Request, _res: Response) {
-        const { email, role_id, project_ids } = _req.body;
-
-        const checkEmail = await checkEmailExistence(email);
-        if (!checkEmail.valid) {
-            _res.status(400).json({ message: 'Email does not exist or is invalid!' });
-            return;
-        }
-
-        const isExistsEmail = await AuthDB.findUserByEmail([email]);
-        if (isExistsEmail.length === 0) {
-            _res.status(409).json({ message: 'A user with this email address does not exist!' });
-            return;
-        }
-
-        for (const project_id of project_ids) {
-            await UsersByWorkspaceDB.addUserToWorkspace([isExistsEmail[0].id, project_id, role_id])
-        }
-
-        _res.status(201).json({
-            message: 'User added to projects successfully'
-        });
-    };
 }

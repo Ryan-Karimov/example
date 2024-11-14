@@ -5,7 +5,8 @@ export class ProjectTypesDB {
         const query = `
             SELECT
                 id,
-                title
+                title,
+                image
             FROM admin.project_types;`;
 
         const result = await db.query(query)

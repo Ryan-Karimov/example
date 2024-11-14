@@ -19,7 +19,8 @@ export class WorkspaceDB {
                 workspace.workspaces
             WHERE
                 owner_id = $1
-                AND is_active;`;
+                AND is_active
+            ORDER BY id;`;
 
         const result = await db.query(query, params);
         return result;
@@ -65,6 +66,53 @@ export class WorkspaceDB {
                 AND is_active;`;
 
         const result = await db.query(query, params);
+        return result;
+    }
+
+    static async checkTitleExists(params: Array<string>): Promise<boolean> {
+        const query = `
+            SELECT COUNT(*) 
+            FROM workspace.workspaces 
+            WHERE owner_id = $1 AND LOWER(title) = LOWER($2)`;
+
+        const result = await db.query(query, params);
+        return parseInt(result[0].count) > 0;
+    }
+
+    static async checkTitleExistsForUpdate(params: Array<string>): Promise<boolean> {
+        const query = `
+            SELECT COUNT(*) 
+            FROM workspace.workspaces 
+            WHERE owner_id = $1 
+            AND LOWER(title) = LOWER($2)
+            AND id != $3`;
+
+        const result = await db.query(query, params);
+        return parseInt(result[0].count) > 0;
+    }
+
+    static async checkWorkspacePermission(params: Array<string>) {
+        const query = `
+            SELECT
+                owner_id
+            FROM
+                workspace.workspaces
+            WHERE
+                id = $1
+                AND is_active;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+    static async getRoles() {
+        const query = `
+            SELECT
+                *
+            FROM
+                workspace.roles;`;
+
+        const result = await db.query(query);
         return result;
     }
 }

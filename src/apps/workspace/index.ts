@@ -12,12 +12,19 @@ import {
 import workspaceRoute from './apps/routes'
 
 export function workspaceRouteRegister(prefix: string, router: Router, ...middlewares: Array<CallableFunction>): void {
-    if (middlewares.length !== 0) router.use(concatPaths(prefix), middlewares.map((middleware) => middleware()))
+    if (middlewares.length !== 0) router.use(concatPaths(prefix), middlewares.map((middleware) => {
+        return middleware();
+    }))
 
     router.post(concatPaths(prefix),
         Controller(
             WorkspaceService.createWorkspace,
             createWorkspaceSchema));                            // TO CREATE A NEW WORKSPACE
+
+    router.get(concatPaths(prefix, 'roles'),
+        Controller(
+            WorkspaceService.getRoles
+        ));                                                     // TO GET ALL ROLES
 
     router.get(concatPaths(prefix),
         Controller(
@@ -37,8 +44,6 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
         Controller(
             WorkspaceService.getWorkspaceById,
             getWorkspaceSchema));                               // TO GET WORKSPACE BY ID
-
-    console.log(concatPaths(prefix, ':id'));
 
     router.use(concatPaths(prefix, ':id'), workspaceRoute())    // REGISTRATION WORKSPACE APPS
 }

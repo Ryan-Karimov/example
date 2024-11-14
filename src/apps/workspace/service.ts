@@ -6,6 +6,14 @@ export class WorkspaceService {
         const { title, avatar } = _req.body;
         const userId = _req.user.id;
 
+        const titleExists = await WorkspaceDB.checkTitleExists([userId, title]);
+        if (titleExists) {
+            _res.status(400).json({
+                message: 'A workspace with this name already exists'
+            });
+            return;
+        }
+
         const result = await WorkspaceDB.createWorkspace([userId, title, avatar]);
         _res.status(201).json({
             message: 'Workspace created successfully!',
@@ -28,6 +36,14 @@ export class WorkspaceService {
     static async updateWorkspaceById(_req: Request, _res: Response) {
         const { title, avatar } = _req.body;
         const { id } = _req.params;
+        const userId = _req.user.id;
+
+        const titleExists = await WorkspaceDB.checkTitleExistsForUpdate([userId, title, id]);
+        if (titleExists) {
+            return _res.status(400).json({
+                message: 'A workspace with this name already exists'
+            });
+        }
 
         const result = await WorkspaceDB.updateWorkspaceById([id, title, avatar]);
         _res.status(200).json({
@@ -57,4 +73,18 @@ export class WorkspaceService {
         });
         return;
     } // DONE
+
+    static async checkWorkspacePermission(id) {
+        const result = await WorkspaceDB.checkWorkspacePermission([id]);
+        return result;
+    } // DONE
+
+    static async getRoles(_req: Request, _res: Response) {
+        const result = await WorkspaceDB.getRoles();
+        _res.status(200).json({
+            message: 'Roles get successfully!',
+            data: result
+        });
+        return;
+    } //DONE
 }
