@@ -4,7 +4,7 @@ import { db } from '../../db';
 export class AuthDB {
     static async findUserByLogin(params: Array<string>, client?: PoolClient) {
         const query = `
-            SELECT id, password
+            SELECT id, user_id, password
             FROM public.user_meta
             WHERE login = $1;`;
         if (client) {

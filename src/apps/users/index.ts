@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { concatPaths } from '../../helper'
+import { concatPaths, Controller } from '../../helper'
+import { UserService } from './service';
 
 export function usersRouteRegister(prefix: string, router: Router, ...middlewares: Array<CallableFunction>): void {
     /**
@@ -10,9 +11,9 @@ export function usersRouteRegister(prefix: string, router: Router, ...middleware
     /**
      * @Registration_Endpoints
     */
-    router.get(concatPaths(prefix, ''), async (req, res) => {
-        res.send({
-            msg: "Response is succescfully!"
-        })
-    });
+    router.get(concatPaths(prefix),
+        Controller(
+            UserService.getMe,
+        )
+    );
 }

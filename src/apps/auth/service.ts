@@ -74,7 +74,7 @@ export class AuthService {
         res.status(200).json({
             message: 'Sign-in successfully!',
             token: GenerateJWToken({
-                id: user[0].id,
+                id: user[0].user_id,
                 login: user[0].login
             })
         });

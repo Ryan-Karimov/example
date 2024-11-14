@@ -14,7 +14,7 @@ export async function compare(word: string, target: string) {
 }
 
 export function generateRandomNumber(): number {
-    return Math.floor(1000 * (1 + 9 * Math.random()))
+    return Math.floor(1000 * (1 + 9 * Math.random()));
 }
 
 export function replaceAll(input: string, word: string, to: string = ''): string {
@@ -32,12 +32,12 @@ export function generateHexFromUUID4() {
     return uuidv4().replace(/-/g, '');
 }
 
-export function getFileDirnaeAndBasename(fileFullPath: string) {
+export function getFileDirnameAndBasename(fileFullPath: string) {
     return {
         dirname: path.dirname(fileFullPath),
         basename: path.basename(fileFullPath),
         format: path.extname(fileFullPath).toLowerCase().replace('.', '')
-    }
+    };
 }
 
 export function removeFile(fullFilePath: string) {
