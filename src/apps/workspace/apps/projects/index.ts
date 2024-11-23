@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { concatPaths, Controller } from '../../../../helper';
 import { addUserSChema, checkEmailSchema, createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
 import { ProjectService } from './service'
+import classRoute from './apps/classes'
+import fileRoute from './apps/files'
 
 const router = Router({ mergeParams: true })
 
@@ -66,11 +68,8 @@ export default () => {
             addUserSChema
         ));
 
-    router.get(concatPaths(':projectId', 'classes'),
-        Controller(
-            ProjectService.getClassesByProject,
-            getProjectSchema
-        ));
+    router.use(concatPaths(':projectId'), classRoute())
+    router.use(concatPaths(':projectId'), fileRoute())
 
     return router;
 };

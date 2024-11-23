@@ -21,6 +21,7 @@ export interface UploadConfig {
     FULL_PATH: string;
     MAIN_FOLDER: string;
     IMAGE_FOLDER_NAME_TO_SAVE: string;
+    IMAGE_FOLDER_NAME_BY_PROJECT: string;
     IMAGE_INCOMING_KEY: string;
     IMAGE_ALLOWED_TYPES: Array<string>
 }

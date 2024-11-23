@@ -8,6 +8,7 @@ import {
     tariffsRoute,
     adminRoutes
 } from './apps';
+import { UploadFileRoutes } from './files';
 
 const mainRouter: Router = Router({ mergeParams: true });
 
@@ -28,6 +29,7 @@ export default (): Router => {
     tariffsRoute('tariffs', apiV1Router, authMiddleware)
     /*/ ________________________________________________________/*/
     adminRoutes('admin', apiV1Router, authMiddleware)
+    UploadFileRoutes('files', mainRouter, authMiddleware)
 
 
     /**

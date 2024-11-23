@@ -10,7 +10,7 @@ export default () => {
         Controller(
             UserService.getUsersByWorkspace,
             getUsersByWorkspace
-        ));                                                     // TO GET USERS IN A SPECIFIC WORKSPACE                                                    // TO ADD A USER TO A SPECIFIC WORKSPACE
+        ));                                                     // TO GET USERS IN A SPECIFIC WORKSPACE
 
     return router;
 };
