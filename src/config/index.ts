@@ -35,6 +35,10 @@ export const UPLOAD: UploadConfig = {
         getEnvParam('FULL_PATH', process.cwd()),
         getEnvParam('MAIN_FOLDER', 'uploads'),
         getEnvParam('IMAGE_FOLDER_NAME_TO_SAVE', 'images')),
+    IMAGE_FOLDER_NAME_BY_PROJECT: path.join(
+        getEnvParam('FULL_PATH', process.cwd()),
+        getEnvParam('MAIN_FOLDER', 'uploads'),
+        getEnvParam('IMAGE_FOLDER_NAME_BY_PROJECT', 'projects')),
     IMAGE_INCOMING_KEY: getEnvParam('IMAGE_INCOMING_KEY', 'image'),
     IMAGE_ALLOWED_TYPES: getEnvParam('IMAGE_ALLOWED_TYPES', 'jpeg, png, gif, bmp, tiff, svg+xml')
         .split(',')

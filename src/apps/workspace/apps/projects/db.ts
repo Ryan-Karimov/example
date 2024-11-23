@@ -147,10 +147,7 @@ export class ProjectDB {
         const query = `
             SELECT
                 u.id,
-                u.last_name,
-                u.first_name,
-                u.email,
-                u.image_url
+                u.email
             FROM
                 public.users u
             JOIN
@@ -207,19 +204,4 @@ export class ProjectDB {
         const result = await db.query(query, params);
         return result;
     };
-
-    static async getClassesByProject(params: Array<string>): Promise<void> {
-        const query = `
-            SELECT
-                *
-            FROM 
-                workspace.classes c
-            WHERE
-                c.project_id = $1
-            ORDER BY
-                c.id;`;
-
-        const result = await db.query(query, params);
-        return result;
-    }
 }

@@ -45,5 +45,5 @@ export function workspaceRouteRegister(prefix: string, router: Router, ...middle
             WorkspaceService.getWorkspaceById,
             getWorkspaceSchema));                               // TO GET WORKSPACE BY ID
 
-    router.use(concatPaths(prefix, ':id'), workspaceRoute())    // REGISTRATION WORKSPACE APPS
+    router.use(concatPaths(prefix, ':id'), workspaceRoute());   // REGISTRATION WORKSPACE APPS
 }

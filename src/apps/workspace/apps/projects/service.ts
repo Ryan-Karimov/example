@@ -27,7 +27,8 @@ export class ProjectService {
         }
 
         const createdProject = await ProjectDB.createProject([id, title, current_price, type_id]);
-        const project = await ProjectDB.getProjectById([createdProject[0].id])
+        const project = await ProjectDB.getProjectById([id, createdProject[0].id])
+
         _res.status(201).json({
             message: 'Project created successfully',
             data: project
@@ -95,7 +96,7 @@ export class ProjectService {
         const result = await ProjectDB.getUsersNotInProject([id, projectId]);
         _res.status(200).json({
             message: 'Successfully retrieved list of users not in the project',
-            data: result[0]
+            data: result
         });
         return;
     }
@@ -129,17 +130,6 @@ export class ProjectService {
         await ProjectDB.addUsersToProject([users, projectId, role_id]);
         _res.status(201).json({
             message: 'Users were successfully added to the project'
-        });
-        return;
-    }
-
-    static async getClassesByProject(_req: Request, _res: Response): Promise<void> {
-        const { id, projectId } = _req.params;
-
-        const result = await ProjectDB.getClassesByProject([projectId])
-        _res.status(200).json({
-            message: 'List of classes retrieved successfully',
-            data: result
         });
         return;
     }
