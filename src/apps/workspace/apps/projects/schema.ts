@@ -47,3 +47,25 @@ export const getProjectSchema = Joi.object({
         projectId: Joi.number().integer().min(1).required()
     }).required()
 })
+
+export const checkEmailSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+        projectId: Joi.number().integer().min(1).required()
+    }).required(),
+    body: Joi.object({
+        email: Joi.string().max(64).required(),
+    }).required()
+})
+
+export const addUserSChema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+        projectId: Joi.number().integer().min(1).required()
+    }).required(),
+    body: Joi.object({
+        email: Joi.array().items(Joi.string().email()).min(1).optional(),
+        role_id: Joi.number().integer().min(1).required(),
+        users: Joi.array().items(Joi.number().integer().min(1)).min(1).optional()
+    }).required()
+})
