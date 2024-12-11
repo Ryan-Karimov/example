@@ -12,38 +12,25 @@ import {
 import workspaceRoute from './apps/routes'
 
 export function workspaceRouteRegister(prefix: string, router: Router, ...middlewares: Array<CallableFunction>): void {
-    if (middlewares.length !== 0) router.use(concatPaths(prefix), middlewares.map((middleware) => {
-        return middleware();
-    }))
+    const middleware = middlewares.map(m => m());
 
-    router.post(concatPaths(prefix),
-        Controller(
-            WorkspaceService.createWorkspace,
-            createWorkspaceSchema));                            // TO CREATE A NEW WORKSPACE
+    // Базовые маршруты
+    router
+        .post(concatPaths(prefix), middleware, Controller(WorkspaceService.createWorkspace, createWorkspaceSchema))
+        .get(concatPaths(prefix, 'roles'), middleware, Controller(WorkspaceService.getRoles))
+        .get(concatPaths(prefix), middleware, Controller(WorkspaceService.getWorkspacesByOwnerId));
 
-    router.get(concatPaths(prefix, 'roles'),
-        Controller(
-            WorkspaceService.getRoles
-        ));                                                     // TO GET ALL ROLES
+    // Маршруты с :id
+    const idRoutes = Router({ mergeParams: true });
 
-    router.get(concatPaths(prefix),
-        Controller(
-            WorkspaceService.getWorkspacesByOwnerId));          // TO GET ALL WORKSPACES LIST
+    idRoutes
+        .patch('/', Controller(WorkspaceService.updateWorkspaceById, updateWorkspaceSchema))
+        .delete('/', Controller(WorkspaceService.deleteWorkspaceById, deleteWorkspaceSchema))
+        .get('/', Controller(WorkspaceService.getWorkspaceById, getWorkspaceSchema));
 
-    router.patch(concatPaths(prefix, ':id'),
-        Controller(
-            WorkspaceService.updateWorkspaceById,
-            updateWorkspaceSchema));                            // TO UPDATE THE WORKSPACE INFO
+    // Подключаем подмаршруты с сохранением базового пути
+    idRoutes.use('/', workspaceRoute());
 
-    router.delete(concatPaths(prefix, ':id'),
-        Controller(
-            WorkspaceService.deleteWorkspaceById,
-            deleteWorkspaceSchema));                            // TO DELETE THE WORKSPACE
-
-    router.get(concatPaths(prefix, ':id'),
-        Controller(
-            WorkspaceService.getWorkspaceById,
-            getWorkspaceSchema));                               // TO GET WORKSPACE BY ID
-
-    router.use(concatPaths(prefix, ':id'), workspaceRoute());   // REGISTRATION WORKSPACE APPS
+    // Применяем middleware к маршрутам с :id
+    router.use(concatPaths(prefix, ':id'), middleware, idRoutes);
 }

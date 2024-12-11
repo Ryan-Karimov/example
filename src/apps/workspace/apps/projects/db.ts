@@ -1,7 +1,7 @@
 import { db } from '../../../../db'
 
 export class ProjectDB {
-    static async getProjects(params: Array<any>): Promise<void> {
+    static async getProjects(params: Array<any>): Promise<any> {
 
         const values: any[] = [params[0], params[1], params[2]];
         let where = '';
@@ -204,4 +204,24 @@ export class ProjectDB {
         const result = await db.query(query, params);
         return result;
     };
+
+    static async getProjectWithTypeById(params: Array<string>): Promise<void> {
+        const query = `
+            SELECT
+                p.id,
+                p.title,
+                p.current_price,
+                pt.id AS type_id,
+                pt.title AS type,
+                pt.image AS image
+            FROM
+                workspace.projects p
+            JOIN
+                admin.project_types pt ON p.type_id = pt.id
+            WHERE
+                p.id = $1;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
 }

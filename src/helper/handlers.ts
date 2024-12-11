@@ -1,7 +1,5 @@
-import multer, { diskStorage } from 'multer';
-import { mkdir as FsMakeDir } from 'fs';
+import multer from 'multer';
 
-import { getFileDirnameAndBasename, generateHexFromUUID4 } from '../helper';
 import { MinioStorage } from '../minio/server';
 
 export function UploadFileHandler(bucketName: string, allowedTypes: Array<string>): multer.Multer {

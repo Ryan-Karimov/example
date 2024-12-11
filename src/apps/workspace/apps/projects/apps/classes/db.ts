@@ -17,7 +17,7 @@ export class ClassDB {
         return result;
     }
 
-    static async createClass(params: Array<string>): Promise<void> {
+    static async createClass(params: Array<any>): Promise<void> {
         const query = `
             INSERT INTO workspace.classes (project_id, class_order, title, color)
             VALUES ($1, $2, $3, $4)
@@ -72,5 +72,52 @@ export class ClassDB {
 
         const result = await db.query(query, params);
         return result;
+    }
+
+    static async getClassByProjectId(params: Array<string>): Promise<any> {
+        const query = `
+            SELECT
+                *
+            FROM
+                workspace.classes c
+            WHERE
+                c.project_id = $1
+            ORDER BY
+                c.id;`;
+
+        const result = await db.query(query, params);
+        return result;
+    }
+
+    static async getClassByProjectIdAndClassOrder(projectId: string, classOrder: number) {
+        const query = `
+            SELECT
+                *
+            FROM
+                workspace.classes c
+            WHERE
+                c.project_id = $1
+            AND
+                c.class_order = $2
+            ORDER BY
+                c.id;`;
+
+        const result = await db.query(query, [projectId, classOrder]);
+        return result;
+    }
+
+    static async getCountClassesByProjectId(projectId: string) {
+        const query = `
+            SELECT
+                COUNT(*)
+            FROM
+                workspace.classes c
+            WHERE
+                c.project_id = $1
+            ORDER BY
+                c.id;`;
+
+        const result = await db.query(query, [projectId]);
+        return result[0].rows || 0;
     }
 }

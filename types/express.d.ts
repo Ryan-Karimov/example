@@ -7,3 +7,7 @@ declare module "express" {
         user: JwtPayload;
     }
 }
+
+interface MulterFileWithPreview extends Express.Multer.File {
+    preview_url?: string;
+}

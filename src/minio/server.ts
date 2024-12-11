@@ -2,10 +2,12 @@ import * as Minio from 'minio';
 import { generateHexFromUUID4, getFileDirnameAndBasename } from '../helper';
 import { StorageEngine } from 'multer';
 import { Request } from 'express';
+import { Readable } from 'stream';
+import { FilesDB } from '../files/db';
 
 const minioClient = new Minio.Client({
-    endPoint: 'localhost',
-    port: 9000,
+    endPoint: '192.168.5.128',
+    port: 8080,
     useSSL: false,
     accessKey: 'TzGodWYiNkGXAxjML1bU',
     secretKey: 'cjy1IuD135v81x6ROeCDuR6RqB2shPclpZUomGn0',
@@ -15,11 +17,14 @@ const minioClient = new Minio.Client({
 export class MinioStorage implements StorageEngine {
     constructor(private bucketName: string) { }
 
-    _handleFile(req: Request, file: Express.Multer.File, cb: (error?: any, info?: Partial<Express.Multer.File>) => void) {
-
+    async _handleFile(req: Request, file: Express.Multer.File, cb: (error?: any, info?: Partial<Express.Multer.File>) => void) {
         const { format } = getFileDirnameAndBasename(file.originalname);
         const filename = `${generateHexFromUUID4()}.${format}`;
         const projectId = req.params.projectId;
+        const filesType = await FilesDB.getFilesTypeByProjectId(projectId);
+        if (filesType.length > 0 && filesType[0].file_type !== file.fieldname.toUpperCase()) {
+            return cb(new Error(`Invalid file type. Expected: ${filesType[0].file_type}, got: ${file.fieldname.toUpperCase()}`));
+        }
         const objectName = `${projectId}/${filename}`;
 
         minioClient.putObject(
@@ -54,7 +59,7 @@ export class MinioStorage implements StorageEngine {
         return minioClient.listObjects(this.bucketName, `${projectId}/`, true);
     }
 
-    async _listObjects(prefix: string, recursive: boolean): Promise<Minio.BucketItem[]> {
+    _listObjects(prefix: string, recursive: boolean): Promise<Minio.BucketItem[]> {
         return new Promise((resolve, reject) => {
             const data: Minio.BucketItem[] = [];
             const stream = minioClient.listObjects(this.bucketName, prefix, recursive);
@@ -75,5 +80,9 @@ export class MinioStorage implements StorageEngine {
 
     _presignedGetObject(objectName: string, expires: number) {
         return minioClient.presignedGetObject(this.bucketName, objectName, expires);
+    }
+
+    _putObject(objectName: string, stream: Readable) {
+        return minioClient.putObject(this.bucketName, objectName, stream);
     }
 }

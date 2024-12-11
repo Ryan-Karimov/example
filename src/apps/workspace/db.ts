@@ -19,8 +19,10 @@ export class WorkspaceDB {
                 workspace.workspaces
             WHERE
                 owner_id = $1
-                AND is_active
-            ORDER BY id;`;
+            AND
+                is_active
+            ORDER BY
+                id;`;
 
         const result = await db.query(query, params);
         return result;

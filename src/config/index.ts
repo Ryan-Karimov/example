@@ -43,4 +43,12 @@ export const UPLOAD: UploadConfig = {
     IMAGE_ALLOWED_TYPES: getEnvParam('IMAGE_ALLOWED_TYPES', 'jpeg, png, gif, bmp, tiff, svg+xml')
         .split(',')
         .map((imageType: string) => `image/${imageType.trim()}`),
+
+    VIDEO_ALLOWED_TYPES: getEnvParam('VIDEO_ALLOWED_TYPES', 'mp4, avi, mov, mkv, webm')
+        .split(',')
+        .map((videoType: string) => `video/${videoType.trim()}`),
+
+    TEXT_ALLOWED_TYPES: getEnvParam('TEXT_ALLOWED_TYPES', 'txt, plain')
+        .split(',')
+        .map((textType: string) => `text/${textType.trim()}`),
 }

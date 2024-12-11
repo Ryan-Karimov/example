@@ -69,3 +69,15 @@ export const addUserSChema = Joi.object({
         users: Joi.array().items(Joi.number().integer().min(1)).min(1).optional()
     }).required()
 })
+
+export const mergingProjectsSchema = Joi.object({
+    params: Joi.object({
+        id: Joi.number().integer().min(1).required(),
+    }).required(),
+    body: Joi.object({
+        title: Joi.string().max(32).optional(),
+        type_id: Joi.number().integer().min(1).required(),
+        current_price: Joi.number().integer().min(0).required(),
+        project_ids: Joi.array().items(Joi.number().integer().min(1)).min(1).required()
+    }).required()
+})

@@ -29,7 +29,7 @@ export default (): Router => {
     tariffsRoute('tariffs', apiV1Router, authMiddleware)
     /*/ ________________________________________________________/*/
     adminRoutes('admin', apiV1Router, authMiddleware)
-    UploadFileRoutes('files', mainRouter, authMiddleware)
+    UploadFileRoutes('files', apiV1Router, authMiddleware)
 
 
     /**

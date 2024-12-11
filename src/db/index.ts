@@ -1,5 +1,6 @@
 import { Pool, PoolClient } from 'pg'
 import { DB } from '../config/index'
+import { QueryBuilder } from './query-builder'
 
 interface DatabaseOptions {
     username: string
@@ -107,8 +108,48 @@ class Db {
         }
 
         return
-
     }
+
+    async insert(table: string, data: Record<string, any>, client?: PoolClient): Promise<any> {
+        const { query, params } = QueryBuilder.buildInsert(table, data);
+        const executor = client || this.pool;
+        const result = await executor.query(query, params);
+        return result.rows[0];
+    }
+
+    async fetch(table: string, filters: Record<string, any>, client?: PoolClient): Promise<any[]> {
+        const { query, params } = QueryBuilder.buildSelect(table, filters);
+        const executor = client || this.pool;
+        const result = await executor.query(query, params);
+        return result.rows;
+    }
+
+    async update(table: string, data: Record<string, any>, filters: Record<string, any>, client?: PoolClient): Promise<any> {
+        const { query, params } = QueryBuilder.buildUpdate(table, data, filters);
+        const executor = client || this.pool;
+        const result = await executor.query(query, params);
+        return result.rowCount;
+    }
+
+    async delete(table: string, filters: Record<string, any>, client?: PoolClient): Promise<any> {
+        const { query, params } = QueryBuilder.buildDelete(table, filters);
+        const executor = client || this.pool;
+        const result = await executor.query(query, params);
+        return result.rowCount;
+    }
+
+    async insertMany(table: string, dataArray: Record<string, any>[], client?: PoolClient): Promise<any[]> {
+        if (dataArray.length === 0) {
+            return [];
+        }
+
+        const { query, params } = QueryBuilder.buildInsertMany(table, dataArray);
+        const executor = client || this.pool;
+        const result = await executor.query(query, params);
+        return result.rows;
+    }
+
+
 }
 
 export const db = Db.getInstance()
@@ -125,4 +166,25 @@ try {
     });
 } catch (error) {
 }
+*/
+
+/** 
+@Получение данных
+const projects = await db.fetch('workspace.projects', { workspace_id: '123', status: 'active' });
+
+@Вставка данных
+const newProject = await db.insert('workspace.projects', {
+    title: 'New Project',
+    current_price: 500,
+});
+
+@Обновление данных
+const updatedProject = await db.update(
+    'workspace.projects',
+    { title: 'Updated Project', current_price: 600 },
+    { id: '123' }
+);
+
+@Удаление данных
+const deletedProject = await db.delete('workspace.projects', { id: '123' });
 */

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { concatPaths, Controller } from '../../../../helper';
-import { addUserSChema, checkEmailSchema, createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, updateProjectSchema } from './schema'
+import { addUserSChema, checkEmailSchema, createProjectSchema, deleteProjectSchema, getProjectSchema, getWorkspaceProjectsSchema, mergingProjectsSchema, updateProjectSchema } from './schema'
 import { ProjectService } from './service'
 import classRoute from './apps/classes'
 import fileRoute from './apps/files'
@@ -14,6 +14,12 @@ export default () => {
             ProjectService.getWorkspaceProjects,
             getWorkspaceProjectsSchema
         ));                                              // TO GET THE LIST OF ALL PROJECTS IN A WORKSPACE
+
+    router.post(concatPaths('merging-projects'),
+        Controller(
+            ProjectService.mergingProjects,
+            mergingProjectsSchema
+        ))
 
     router.post(concatPaths(''),
         Controller(

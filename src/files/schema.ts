@@ -11,7 +11,7 @@ export const uploadFileSchema = Joi.object({
         projectId: Joi.number().integer().min(1).required()
     }).required(),
     body: Joi.object({
-        images: Joi.array().items(Joi.string().max(40)).max(20).min(1).required()
+        image: Joi.array().items(Joi.string().max(40)).max(20).min(1).required()
     }).required()
 })
 
@@ -27,8 +27,8 @@ export const getProjectFilesSchema = Joi.object({
         projectId: Joi.number().integer().min(1).required()
     }).required(),
     query: Joi.object({
-        state: Joi.string().valid(...Object.values(FileState)).default(FileState.QUEUE),
-        page: Joi.number().integer().min(1).default(1),
+        state: Joi.string().valid(...Object.values(FileState)).required(),
+        page: Joi.number().integer().min(0).default(1),
         limit: Joi.number().integer().min(1).default(10)
     })
 })
